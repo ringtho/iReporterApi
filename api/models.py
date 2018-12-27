@@ -9,8 +9,8 @@ class RedFlag:
     def __init__(self,**kwargs):
         self.id = kwargs['id']
         self.createdOn = datetime.today()
-        self.createdBy = createdBy['createdBy']
-        self.types = types['types']
+        self.createdBy = kwargs['createdBy']
+        self.types = kwargs['types']
         self.location = kwargs['location']
         self.status = kwargs['status']
         self.images = kwargs['images']
