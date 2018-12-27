@@ -75,6 +75,16 @@ class TestRedFlags(unittest.TestCase):
         self.assertIn(data["data"][0]["message"], "Updated red-flag record's comment")
         self.assertEqual(res.status_code, 200)
         self.assertEqual(data["data"][0]["id"], 1)
+
+    def test_delete_redflag(self):
+        # response = self.test_client.post("/api/v101/red-flags", json=self.incident)
+        # self.assertIn(response.json["data"][0]["message"], "red flag record created.")
+        res = self.test_client.delete("/api/v1/red-flags/2")
+        data = json.loads(res.data)
+        print(data)
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(data["Error"], "The red flag record doesnt exist or already deleted")
+        self.assertEqual(data["status"], 200)
         
 
     

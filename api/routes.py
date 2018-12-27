@@ -75,4 +75,4 @@ def delete_redflag(red_flag_id):
             "status": 200,
             "data":[{"id": redflag['id'],"message":"red-flag record has been deleted"}]
             })
-        return jsonify({"status": 200, "Error": "The red flag record doesnt exist"})
+        return jsonify({"status": 200, "Error": "The red flag record doesnt exist or already deleted"})
