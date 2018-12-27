@@ -37,7 +37,6 @@ class TestRedFlags(unittest.TestCase):
         self.assertIn(response2.json["data"][0]["message"], "red flag record created.")
         res = self.test_client.get("/api/v1/red-flags")
         data = json.loads(res.data)
-        print(data)
         self.assertEqual(res.status_code, 200)
         self.assertIn("accepted", data["data"][1]["status"])
         self.assertIn("rejected", data["data"][0]["status"])
@@ -45,6 +44,18 @@ class TestRedFlags(unittest.TestCase):
         self.assertEqual(2, data["data"][1]["id"])
         self.assertEqual(data["data"][1]["images"], ["image.jpg","image2"])
 
+    def test_get_single_redflag(self):
+        response = self.test_client.post("/api/v1/red-flags", json=self.incident)
+        self.assertEqual(response.status_code, 201)
+        res = self.test_client.get("/api/v1/red-flags/1")
+        data = json.loads(res.data)
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(data["data"][0]["id"], 1)
+        self.assertIn(data["data"][0]["status"], "rejected")
+        self.assertEqual(len(data), 2)
+        self.assertIn(data["data"][0]["location"], "kampala")
+
+    
 
 if __name__ == '__main__':
     unittest.main()
