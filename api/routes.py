@@ -52,3 +52,16 @@ def get_single_redflag(red_flag_id):
             return jsonify({"status": 200, "Error": "There are no redflags in the database"})
 
         return jsonify({"status": 200, "data": single_redflag}), 200
+
+@app.route("/api/v1/red-flags/<int:red_flag_id>/<string:query>", methods=['PATCH'])
+def edit_location(red_flag_id, query):
+    for redflag in redflags:
+        if redflag["id"] == red_flag_id:
+            data = request.get_json()
+            if (query == "location"):
+                redflag[query] = data[query]
+                print(redflag[query])
+                return jsonify({"status":200, "data": [{"id": red_flag_id,
+                "message": "Updated red-flag record's " + query }]})
+            return jsonify({"status": 200, "message": "The url you provided doesnt exist"
+             ", Try http://127.0.0.1:5000/api/v1/red-flags/{id}/location"})
