@@ -39,3 +39,16 @@ def get_redflags():
     if len(redflag_entry) < 1:
         return jsonify({"status": 200, "message":"There are no red flags created"}), 200
     return jsonify({"status": 200, "data": redflag_entry }), 200
+
+@app.route("/api/v1/red-flags/<int:red_flag_id>", methods=["GET"])
+def get_single_redflag(red_flag_id):
+    single_redflag = []
+    for redflag in redflags:
+        if redflag["id"] == red_flag_id:
+            single_redflag.append(redflag)
+        print(single_redflag)
+
+        if len(single_redflag) < 1:
+            return jsonify({"status": 200, "Error": "There are no redflags in the database"})
+
+        return jsonify({"status": 200, "data": single_redflag}), 200
