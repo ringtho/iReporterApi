@@ -26,3 +26,16 @@ def create_redflag():
         return jsonify({"status": 400, "Error": "CreatedBy should be an int"}), 400
     return jsonify({"status": 201, "data": [{ "id": redflags[0]["id"],
     "message": "red flag record created."}]}), 201
+
+@app.route("/api/v1/red-flags", methods=["GET"])
+def get_redflags():
+    redflag_entry = []
+    print(redflags)
+
+    for redflag in redflags:
+        redflag_entry.append(redflag)
+
+    print(redflag_entry)
+    if len(redflag_entry) < 1:
+        return jsonify({"status": 200, "message":"There are no red flags created"}), 200
+    return jsonify({"status": 200, "data": redflag_entry }), 200
