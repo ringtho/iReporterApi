@@ -58,10 +58,10 @@ def edit_location(red_flag_id, query):
     for redflag in redflags:
         if redflag["id"] == red_flag_id:
             data = request.get_json()
-            if (query == "location"):
+            if (query == "location") or (query == "comment"):
                 redflag[query] = data[query]
-                print(redflag[query])
                 return jsonify({"status":200, "data": [{"id": red_flag_id,
                 "message": "Updated red-flag record's " + query }]})
             return jsonify({"status": 200, "message": "The url you provided doesnt exist"
-             ", Try http://127.0.0.1:5000/api/v1/red-flags/{id}/location"})
+             ", Try http://127.0.0.1:5000/api/v1/red-flags/{id}/query where query can be 'comment'"
+             " or 'location'"})
