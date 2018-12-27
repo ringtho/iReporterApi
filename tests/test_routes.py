@@ -30,11 +30,8 @@ class TestRedFlags(unittest.TestCase):
         "status": "accepted", "images": ["image.jpg","image2"], "videos": "videos.org", 
         "comment": "my name is my name"}
         response = self.test_client.post("/api/v1/red-flags", json=incidents)
-        # response2 = self.test_client.post("/api/v1/red-flags", json=self.incident)
         self.assertEqual(response.status_code, 201)
-        # self.assertEqual(response2.status_code, 201)
         self.assertIn(response.json["data"][0]["message"], "red flag record created.")
-        # self.assertIn(response2.json["data"][0]["message"], "red flag record created.")
         res = self.test_client.get("/api/v1/red-flags")
         data = json.loads(res.data)
         self.assertEqual(res.status_code, 200)
@@ -46,8 +43,6 @@ class TestRedFlags(unittest.TestCase):
         self.assertEqual(len(data), 2)
 
     def test_get_single_redflag(self):
-        # response = self.test_client.post("/api/v1/red-flags", json=self.incident)
-        # self.assertEqual(response.status_code, 201)
         res = self.test_client.get("/api/v1/red-flags/1")
         data = json.loads(res.data)
         self.assertEqual(res.status_code, 200)
@@ -57,8 +52,6 @@ class TestRedFlags(unittest.TestCase):
         self.assertIn(data["data"][0]["location"], "mutungo")
 
     def test_edit_location(self):
-        # response = self.test_client.post("/api/v1/red-flags", json=self.incident)
-        # self.assertIn(response.json["data"][0]["message"], "red flag record created.")
         location = {"location": "mutungo"}
         res = self.test_client.patch("/api/v1/red-flags/1/location" ,json=location)
         data = json.loads(res.data)
@@ -67,8 +60,6 @@ class TestRedFlags(unittest.TestCase):
         self.assertEqual(data["data"][0]["id"], 1)
 
     def test_edit_comment(self):
-        # response = self.test_client.post("/api/v101/red-flags", json = self.incident)
-        # self.assertIn(response.json["data"][0]["message"], "red flag record created.")
         comment = {"comment": "Museveni is so corrupt"}
         res = self.test_client.patch("/api/v1/red-flags/1/comment" ,json=comment)
         data =json.loads(res.data)
@@ -77,8 +68,6 @@ class TestRedFlags(unittest.TestCase):
         self.assertEqual(data["data"][0]["id"], 1)
 
     def test_delete_redflag(self):
-        # response = self.test_client.post("/api/v101/red-flags", json=self.incident)
-        # self.assertIn(response.json["data"][0]["message"], "red flag record created.")
         res = self.test_client.delete("/api/v1/red-flags/2")
         data = json.loads(res.data)
         print(data)
