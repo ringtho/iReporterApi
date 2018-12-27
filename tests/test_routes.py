@@ -43,6 +43,7 @@ class TestRedFlags(unittest.TestCase):
         self.assertEqual(1, data["data"][0]["id"])
         self.assertEqual(2, data["data"][1]["id"])
         self.assertEqual(data["data"][1]["images"], ["image.jpg","image2"])
+        self.assertEqual(len(data), 2)
 
     def test_get_single_redflag(self):
         # response = self.test_client.post("/api/v1/red-flags", json=self.incident)
@@ -64,6 +65,17 @@ class TestRedFlags(unittest.TestCase):
         self.assertIn(data["data"][0]["message"], "Updated red-flag record's location")
         self.assertEqual(res.status_code, 200)
         self.assertEqual(data["data"][0]["id"], 1)
+
+    def test_edit_comment(self):
+        # response = self.test_client.post("/api/v101/red-flags", json = self.incident)
+        # self.assertIn(response.json["data"][0]["message"], "red flag record created.")
+        comment = {"comment": "Museveni is so corrupt"}
+        res = self.test_client.patch("/api/v1/red-flags/1/comment" ,json=comment)
+        data =json.loads(res.data)
+        self.assertIn(data["data"][0]["message"], "Updated red-flag record's comment")
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(data["data"][0]["id"], 1)
+        
 
     
 
