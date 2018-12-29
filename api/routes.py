@@ -76,3 +76,22 @@ def delete_redflag(red_flag_id):
             "data":[{"id": redflag['id'],"message":"red-flag record has been deleted"}]
             })
         return jsonify({"status": 200, "Error": "The red flag record doesnt exist or already deleted"})
+
+@app.errorhandler(404)
+def page_doesnt_exist(e):
+    valid_urls = {
+        'POST a redflag': {'url': '/api/v1/red-flags', 'method(s)': 'POST', 'body': {'id':'int', 'createdBy':'int','createdOn':'datetime',
+        'type':'string','location':'string','status':'string','images':'image', 'videos':'videos','comment':'string'
+         }},
+        'GET all redflags': {'url': '/api/v1/red-flags', 'method(s)': 'GET'},
+        'GET single redflag': {'url': '/api/v1/red-flags/red_flag_id', 'method(s)': 'GET'},
+        'DELETE a redflag': {'url': '/api/v1/red-flags/red_flag_id', 'method(s)': 'DELETE'},
+        'EDIT location of a redflag': {'url': '/api/v1/red-flags/red_flag_id/location', 'method(s)': 'PATCH'},
+        'EDIT comment of a redflag': {'url': '/api/v1/red-flags/red_flag_id/comment', 'method(s)': 'PATCH'},
+        'GET HelloWorld': {'url': '/', 'method(s)': 'GET'}
+    }
+    return jsonify ({
+        'Issue': 'You have entered an unknown URL.',
+        'Valid URLs': valid_urls,
+        'message': 'Please contact Smith Ringtho for more details on this API.'
+        })
