@@ -80,11 +80,14 @@ class TestRedFlags(unittest.TestCase):
         self.assertEqual(data["data"][0]["id"], 1)
 
     def test_delete_redflag(self):
-        res = self.test_client.delete("/api/v1/red-flags/2")
+        response = self.test_client.post("/api/v1/red-flags" ,json=self.incident)
+        self.assertEqual(response.status_code, 201)
+        res = self.test_client.delete("/api/v1/red-flags/1")
         data = json.loads(res.data)
         print(data)
         self.assertEqual(res.status_code, 200)
-        self.assertEqual(data["Error"], "The red flag record doesnt exist or already deleted")
+        self.assertEqual(data["data"][0]["message"], "red-flag record has been deleted")
+        self.assertEqual(data["data"][0]["id"],1)
         self.assertEqual(data["status"], 200)
 
     def test_createdBy_string(self):
@@ -96,7 +99,24 @@ class TestRedFlags(unittest.TestCase):
         self.assertEqual(response.json["Error"], "CreatedBy should be an int")
         self.assertEqual(response.json["status"], 400)
 
-    
+    def test_delete_nonexistent_object(self):
+        response = self.test_client.delete("/api/v1/red-flags/4")
+        data = json.loads(response.data)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(data["status"], 200)
+        self.assertEqual(data["Error"], "The red flag record doesnt exist or already deleted")
+
+    def test_error_patch_invalid_id(self):
+        response = self.test_client.patch("/api/v1/red-flags/4/location")
+        data = json.loads(response.data)
+        self.assertEqual(data["status"], 200)
+        self.assertIn(data["Error"], "Non existent redflag id")
+
+    def test_error_patch_invalid_query_name(self):
+        response = self.test_client.patch("/api/v1/red-flags/1/locationsa")
+        data = json.loads(response.data)
+        self.assertEqual(data["status"], 200)
+        self.assertIn("The url you provided doesnt exist", data["message"])
 
 if __name__ == '__main__':
     unittest.main()

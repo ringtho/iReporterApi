@@ -65,6 +65,7 @@ def edit_location(red_flag_id, query):
             return jsonify({"status": 200, "message": "The url you provided doesnt exist"
              ", Try http://127.0.0.1:5000/api/v1/red-flags/{id}/query where query can be 'comment'"
              " or 'location'"})
+        return jsonify({"status": 200, "Error": "Non existent redflag id"})
 
 @app.route("/api/v1/red-flags/<int:red_flag_id>" ,methods=['DELETE'])
 def delete_redflag(red_flag_id):
