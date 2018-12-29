@@ -1,13 +1,14 @@
 import unittest
 from api.routes import app
 import json
+from api import routes
 
 class TestRedFlags(unittest.TestCase):
     def setUp(self):
         """initialise test client"""
         self.test_client = app.test_client()
         self.incident = {
-        "id": 1, 
+        "id": 1,
         "createdBy": 1, 
         "types":"redflag", 
         "location":"kampala", 
@@ -17,8 +18,19 @@ class TestRedFlags(unittest.TestCase):
         "comment": "my name is"
         }
 
+        self.redflags = routes.redflags
+           
+    # def test_empty_database(self):
+    #     response = self.test_client.get("/api/v1/red-flags")
+    #     self.assertEqual(response.status_code, 200)
+    #     data = json.loads(response.data)
+    #     self.assertIn(data["message"], "There are no red flags created")
+
+
+
     def test_create_redflag(self):
-        response = self.test_client.post("/api/v1/red-flags", json=self.incident)
+        response = self.test_client.post("/api/v1/red-flags", content_type='application/json',
+        data=json.dumps(self.incident))
         data =json.loads(response.data)
         self.assertEqual(response.status_code, 201)
         self.assertIn(data["data"][0]["message"], "red flag record created.")
@@ -74,7 +86,15 @@ class TestRedFlags(unittest.TestCase):
         self.assertEqual(res.status_code, 200)
         self.assertEqual(data["Error"], "The red flag record doesnt exist or already deleted")
         self.assertEqual(data["status"], 200)
-        
+
+    def test_createdBy_string(self):
+        incidents = { "id": 2,"createdOn": "Thu, 27 Dec 2018 08:04:32 GMT","createdBy": '1', "types":"redflag", "location":"kampala", 
+        "status": "accepted", "images": ["image.jpg","image2"], "videos": "videos.org", 
+        "comment": "my name is my name"}
+        response = self.test_client.post("/api/v1/red-flags",content_type='application/json', data=json.dumps(incidents))
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.json["Error"], "CreatedBy should be an int")
+        self.assertEqual(response.json["status"], 400)
 
     
 
