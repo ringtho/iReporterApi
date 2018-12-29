@@ -26,8 +26,6 @@ class TestRedFlags(unittest.TestCase):
     #     data = json.loads(response.data)
     #     self.assertIn(data["message"], "There are no red flags created")
 
-
-
     def test_create_redflag(self):
         response = self.test_client.post("/api/v1/red-flags", content_type='application/json',
         data=json.dumps(self.incident))
@@ -117,6 +115,18 @@ class TestRedFlags(unittest.TestCase):
         data = json.loads(response.data)
         self.assertEqual(data["status"], 200)
         self.assertIn("The url you provided doesnt exist", data["message"])
+
+    def test_error_get_invalid_redflag(self):
+        response = self.test_client.get("/api/v1/red-flags/4")
+        data = json.loads(response.data)
+        self.assertEqual(data["status"], 200)
+        self.assertEqual(data["Error"], "A red flag with that id does not exist")
+
+    def test_error_page_not_found(self):
+        response = self.test_client.post("/abc")
+        data = json.loads(response.data)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(data["Issue"], "You have entered an unknown URL.")
 
 if __name__ == '__main__':
     unittest.main()

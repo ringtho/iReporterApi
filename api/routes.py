@@ -49,7 +49,7 @@ def get_single_redflag(red_flag_id):
         print(single_redflag)
 
         if len(single_redflag) < 1:
-            return jsonify({"status": 200, "Error": "There are no redflags in the database"})
+            return jsonify({"status": 200, "Error": "A red flag with that id does not exist"})
 
         return jsonify({"status": 200, "data": single_redflag}), 200
 
