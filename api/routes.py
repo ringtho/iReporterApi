@@ -96,3 +96,14 @@ def page_doesnt_exist(e):
         'Valid URLs': valid_urls,
         'message': 'Please contact Smith Ringtho for more details on this API.'
         })
+        
+@app.errorhandler(405)
+def method_not_allowed(self):
+    methods = [{"PATCH": "editing a redflag", "GET":"retrieving redflags", 
+    "POST":"creating a redflag","DELETE":"deleting a redflag"}]
+
+    return jsonify({
+        "status": 200, 
+        "Error": "Please check to ensure to check that your calling the right method!!",
+        "Methods": methods
+    })
