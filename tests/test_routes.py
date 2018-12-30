@@ -19,7 +19,16 @@ class TestRedFlags(unittest.TestCase):
         }
 
         self.redflags = routes.redflags
-           
+
+    def test_hello_world(self):
+        response = self.test_client.get("/")
+        data = json.loads(response.data)
+        self.assertEqual(response.status_code, 200)
+        self.assertIn(data["message"], "Hello World, it's Smith!!")
+        self.assertEqual(data["status"], 200)
+
+
+
     # def test_empty_database(self):
     #     response = self.test_client.get("/api/v1/red-flags")
     #     self.assertEqual(response.status_code, 200)
