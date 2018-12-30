@@ -128,5 +128,11 @@ class TestRedFlags(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(data["Issue"], "You have entered an unknown URL.")
 
+    def test_method_not_allowed(self):
+        response = self.test_client.patch("/api/v1/red-flags")
+        self.assertEqual(response.status_code, 200)
+        data = json.loads(response.data)
+        self.assertEqual(data["Error"],"Please check to ensure to check that your calling the right method!!")
+
 if __name__ == '__main__':
     unittest.main()
