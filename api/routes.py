@@ -8,7 +8,7 @@ redflags = []
 
 @app.route("/")
 def hello():
-    return jsonify({"message":"Hello World, it's Smith!!"}),200
+    return jsonify({"status": 200,"message":"Hello World, it's Smith!!"}),200
 
 @app.route("/api/v1/red-flags" ,methods=["POST"])
 def create_redflag():
