@@ -7,4 +7,7 @@ Corruption is a huge bane to Africa’s development. African countries must deve
 
 [iReporter Heroku](https://sringtho.herokuapp.com)
 
+# Overview
+This iReporter Api serves to create, edit, delete and retrieve redflag incidents that have been already created.
+
 
