@@ -6,8 +6,8 @@ class RedFlag:
     """
     class for creating endpoints for a redflag record
     """
-    def __init__(self,**kwargs):
-        self.id = kwargs['id']
+    def __init__(self,id,**kwargs):
+        self.id = id
         self.createdOn = datetime.today()
         self.createdBy = kwargs['createdBy']
         self.types = kwargs['types']
