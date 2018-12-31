@@ -92,7 +92,7 @@ class TestRedFlags(unittest.TestCase):
     #     "comment": "my name is my name"}
     #     response = self.test_client.post("/api/v1/red-flags" ,json=incidents)
     #     self.assertEqual(response.status_code, 201)
-    #     res = self.test_client.delete("/api/v1/red-flags/3")
+    #     res = self.test_client.delete("/api/v1/red-flags/2")
     #     data = json.loads(res.data)
     #     print(data)
     #     self.assertEqual(res.status_code, 200)
