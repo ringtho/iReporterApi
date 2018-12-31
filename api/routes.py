@@ -90,7 +90,7 @@ def page_doesnt_exist(e):
         'Issue': 'You have entered an unknown URL.',
         'Valid URLs': valid_urls,
         'message': 'Please contact Smith Ringtho for more details on this API.'
-        })
+        }), 404
         
 @app.errorhandler(405)
 def method_not_allowed(self):
@@ -98,8 +98,8 @@ def method_not_allowed(self):
     "POST":"creating a redflag","DELETE":"deleting a redflag"}]
 
     return jsonify({
-        "status": 200, 
+        "status": 405, 
         "Error": "Please check to ensure to check that your calling the right method!!",
         "Methods": methods
-    })
+    }), 405
 
