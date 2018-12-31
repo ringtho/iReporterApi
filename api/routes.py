@@ -47,14 +47,12 @@ def get_redflags():
 @app.route("/api/v1/red-flags/<int:red_flag_id>", methods=["GET"])
 def get_single_redflag(red_flag_id):
     single_redflag = []
+    if len(redflags) < 1:
+        return jsonify({"status": 200, "Error": "There are no redflags present in the database"})
     for redflag in redflags:
-        if redflag["id"] == red_flag_id:
-            single_redflag.append(redflag)
-        print(single_redflag)
-
-        if len(single_redflag) < 1:
-            return jsonify({"status": 200, "Error": "A red flag with that id does not exist"})
-
+        if redflag["id"] != red_flag_id:
+            return jsonify({"status": 200, "Error": "A redflag with such an id doesnt exist"})       
+        single_redflag.append(redflag)
         return jsonify({"status": 200, "data": single_redflag}), 200
 
 @app.route("/api/v1/red-flags/<int:red_flag_id>/<string:query>", methods=['PATCH'])
