@@ -69,7 +69,7 @@ def delete_redflag(red_flag_id):
             "status": 200,
             "data":[{"id": redflag['id'],"message":"red-flag record has been deleted"}]
             })
-        return jsonify({"status": 404, "Error": f"The red flag record with id {red_flag_id} doesnt exist"}),404
+    return jsonify({"status": 404, "Error": f"The red flag record with id {red_flag_id} doesnt exist"}),404
 
 @app.errorhandler(404)
 def page_doesnt_exist(e):

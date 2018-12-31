@@ -4,4 +4,4 @@ api/__pycache__/
 tests/__pycache__/
 venv/
 .coverage
-
+api/__init__.pyc
