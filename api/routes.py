@@ -44,7 +44,7 @@ def get_single_redflag(red_flag_id):
         if redflag["id"] == red_flag_id:
             single_redflag.append(redflag)
             return jsonify({"status": 200, "data": single_redflag}), 200
-        return jsonify({"status": 404, "Error": "A redflag with an id of {} doesnt exist".format(red_flag_id)}),404   
+    return jsonify({"status": 404, "Error": "A redflag with an id of {} doesnt exist".format(red_flag_id)}),404   
        
 @app.route("/api/v1/red-flags/<int:red_flag_id>/<string:query>", methods=['PATCH'])
 def edit_location(red_flag_id, query):
@@ -58,7 +58,7 @@ def edit_location(red_flag_id, query):
             return jsonify({"status": 404, "message": "The url you provided doesnt exist"
              ", Try http://127.0.0.1:5000/api/v1/red-flags/1/query where query can be 'comment'"
              " or 'location'"}),404
-        return jsonify({"status": 404, "Error": f"Non existent redflag. Id {red_flag_id} doesnt exist!"}),404
+    return jsonify({"status": 404, "Error": f"Non existent redflag. Id {red_flag_id} doesnt exist!"}),404
 
 @app.route("/api/v1/red-flags/<int:red_flag_id>" ,methods=['DELETE'])
 def delete_redflag(red_flag_id):
@@ -69,7 +69,7 @@ def delete_redflag(red_flag_id):
             "status": 200,
             "data":[{"id": redflag['id'],"message":"red-flag record has been deleted"}]
             })
-        return jsonify({"status": 404, "Error": f"The red flag record with id {red_flag_id} doesnt exist"}),404
+    return jsonify({"status": 404, "Error": f"The red flag record with id {red_flag_id} doesnt exist"}),404
 
 @app.errorhandler(404)
 def page_doesnt_exist(e):
