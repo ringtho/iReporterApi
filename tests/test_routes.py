@@ -19,7 +19,7 @@ class TestRedFlags(unittest.TestCase):
         }
 
         self.redflags = routes.redflags
-
+        
     def test_hello_world(self):
         response = self.test_client.get("/")
         data = json.loads(response.data)
@@ -114,7 +114,7 @@ class TestRedFlags(unittest.TestCase):
         data = json.loads(response.data)
         self.assertEqual(response.status_code, 404)
         self.assertEqual(data["status"], 404)
-        self.assertIn("The red flag record with id", data["Error"])
+        self.assertIn("The red flag record with id 4 doesnt exist", data["Error"])
 
     def test_error_patch_invalid_id(self):
         response = self.test_client.patch("/api/v1/red-flags/4/location")
@@ -129,7 +129,7 @@ class TestRedFlags(unittest.TestCase):
         self.assertEqual(data["status"], 404)
         self.assertIn("The url you provided doesnt exist", data["message"])
 
-    def test_error_get_invalid_redflag(self):
+    def test_error_get_nonexistent_redflag(self):
         response = self.test_client.get("/api/v1/red-flags/4")
         data = json.loads(response.data)
         self.assertEqual(response.status_code, 404)
