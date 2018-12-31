@@ -32,19 +32,21 @@ def create_redflag():
 @app.route("/api/v1/red-flags", methods=["GET"])
 def get_redflags():
     if len(redflags) < 1:
-        return jsonify({"status": 200, "message":"There are no red flags created"}), 200
+        return jsonify({"status": 404, "message":"There are no red flags in the database"}), 404
     return jsonify({"status": 200, "data": redflags }), 200
 
 @app.route("/api/v1/red-flags/<int:red_flag_id>", methods=["GET"])
 def get_single_redflag(red_flag_id):
     single_redflag = []
     if len(redflags) < 1:
-        return jsonify({"status": 200, "Error": "There are no redflags present in the database"})
+        return jsonify({"status": 404, "Error": "There are no redflags present in the database"}),404
     for redflag in redflags:
-        if redflag["id"] != red_flag_id:
-            return jsonify({"status": 200, "Error": "A redflag with such an id doesnt exist"})       
-        single_redflag.append(redflag)
-        return jsonify({"status": 200, "data": single_redflag}), 200
+        if redflag["id"] == red_flag_id:
+            single_redflag.append(redflag)
+            return jsonify({"status": 200, "data": single_redflag}), 200
+        return jsonify({"status": 404, "Error": "A redflag with an id of {} doesnt exist".format(red_flag_id)}),404   
+       
+        
 
 @app.route("/api/v1/red-flags/<int:red_flag_id>/<string:query>", methods=['PATCH'])
 def edit_location(red_flag_id, query):
@@ -55,10 +57,10 @@ def edit_location(red_flag_id, query):
                 redflag[query] = data[query]
                 return jsonify({"status":200, "data": [{"id": red_flag_id,
                 "message": "Updated red-flag record's " + query }]})
-            return jsonify({"status": 200, "message": "The url you provided doesnt exist"
-             ", Try http://127.0.0.1:5000/api/v1/red-flags/{id}/query where query can be 'comment'"
-             " or 'location'"})
-        return jsonify({"status": 200, "Error": "Non existent redflag id"})
+            return jsonify({"status": 404, "message": "The url you provided doesnt exist"
+             ", Try http://127.0.0.1:5000/api/v1/red-flags/1/query where query can be 'comment'"
+             " or 'location'"}),404
+        return jsonify({"status": 404, "Error": f"Non existent redflag. Id {red_flag_id} doesnt exist!"}),404
 
 @app.route("/api/v1/red-flags/<int:red_flag_id>" ,methods=['DELETE'])
 def delete_redflag(red_flag_id):
@@ -69,7 +71,7 @@ def delete_redflag(red_flag_id):
             "status": 200,
             "data":[{"id": redflag['id'],"message":"red-flag record has been deleted"}]
             })
-        return jsonify({"status": 200, "Error": "The red flag record doesnt exist or already deleted"})
+        return jsonify({"status": 404, "Error": f"The red flag record with id {red_flag_id} doesnt exist"}),404
 
 @app.errorhandler(404)
 def page_doesnt_exist(e):
