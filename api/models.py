@@ -1,13 +1,17 @@
 from datetime import datetime
 from random import randint
 
+count =0
 class RedFlag:
 
     """
     class for creating endpoints for a redflag record
     """
-    def __init__(self,id,**kwargs):
-        self.id = id
+    
+    def __init__(self,**kwargs):
+        global count
+        count+=1
+        self.id = count
         self.createdOn = datetime.today()
         self.createdBy = kwargs['createdBy']
         self.types = kwargs['types']
@@ -16,6 +20,8 @@ class RedFlag:
         self.images = kwargs['images']
         self.videos = kwargs['videos']
         self.comment = kwargs['comment']
+
+        
 
     def json_format(self):
         format = {
