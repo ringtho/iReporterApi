@@ -10,4 +10,15 @@ Corruption is a huge bane to Africa’s development. African countries must deve
 # Overview
 This iReporter Api serves to create, edit, delete and retrieve redflag incidents that have been already created.
 
+A user can:
+
+- get all redflags in the database
+- get a particular redflag in the database using its id
+- edit the location of a particular redflag
+- edit the comment of a particular redflag
+- delete a particular redflag
+
+## API ENDPOINTS ##
+
+
 
