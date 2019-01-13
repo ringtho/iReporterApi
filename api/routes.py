@@ -1,11 +1,11 @@
 from flask import Flask, jsonify, request
 from api.models import RedFlag
+from api.validator import Validator
 
 
 app = Flask(__name__)
 
 redflags = []
-# count = 0
 
 @app.route("/")
 def hello():
@@ -13,21 +13,17 @@ def hello():
 
 @app.route("/api/v1/red-flags" ,methods=["POST"])
 def create_redflag():
-    data = request.get_json()
-    try:
-        print(data)
-        if type(data["createdBy"]) is not int:
-            raise ValueError("createdBy field only takes an integer")
+    validator = Validator(request)
+    if validator.redflag_is_valid():
+        data = request.get_json()
         redflag = RedFlag(createdBy = data["createdBy"], types = data["types"], 
         location = data["location"],status = data["status"], images = data["images"], 
         videos = data["videos"],comment = data["comment"])
         redflags.append(redflag.json_format())
-    except ValueError as e:
-        print(e)
-        return jsonify({"status": 400, "Error": "CreatedBy should be an int"}), 400
-
-    return jsonify({"status": 201, "data": [{ "id": redflags[-1]["id"],
-    "message": "red flag record created."}]}), 201
+        return jsonify({"status": 201, "data": [{ "id": redflags[-1]["id"],
+        "message": "red flag record created."}]}), 201
+    else:
+        return jsonify({"status": 400, "Error": validator.error})
  
 @app.route("/api/v1/red-flags", methods=["GET"])
 def get_redflags():
