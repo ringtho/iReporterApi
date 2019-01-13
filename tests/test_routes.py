@@ -110,10 +110,9 @@ class TestRedFlags(unittest.TestCase):
         "status": "accepted", "images": ["image.jpg","image2"], "videos": ["videos.mp4","smith.mkv"], 
         "comment": "The most corrupt official ever"}
         response = self.test_client.post("/api/v1/red-flags",content_type='application/json', json=incident)
-        self.assertEqual(response.status_code, 400)
-        self.assertEqual(response.json["Error"], "CreatedBy should be an int")
-        self.assertEqual(response.json["status"], 400)
-
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json["Error"], "createdBy should be an integer")
+       
     def test_delete_nonexistent_object(self):
         response = self.test_client.delete("/api/v1/red-flags/1")
         data = json.loads(response.data)
