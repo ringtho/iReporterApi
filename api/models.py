@@ -1,5 +1,5 @@
 from datetime import datetime
-from random import randint
+
 
 count =0
 class RedFlag:

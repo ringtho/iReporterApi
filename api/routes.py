@@ -6,6 +6,7 @@ from api.validator import Validator
 app = Flask(__name__)
 
 redflags = []
+users = []
 
 @app.route("/")
 def hello():
