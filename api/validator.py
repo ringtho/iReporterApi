@@ -25,4 +25,18 @@ class Validator:
         assert isinstance(redflag['createdBy'], int), (
             'createdBy should be an integer'
         )
+
+    def validate_user_data(self, user_data):
+        assert isinstance(user_data, dict),'Ensure to enter registration details in json format'
+        self.ensure_no_empty_fields_user(user_data)
+
+    def ensure_no_empty_fields_user(self, user_data):
+        assert 'firstname' in user_data, 'Firstname not specified'
+        assert 'lastname' in user_data, 'lastname not specified'
+        assert 'firstname' in user_data, 'firstname not specified'
+        assert 'email' in user_data, 'Please provide an email'
+        assert 'phoneNumber' in user_data, 'phoneNumber not specified'
+        assert 'username' in user_data, 'username not specified'
+        assert 'password' in user_data, 'password not specified'
+
         
