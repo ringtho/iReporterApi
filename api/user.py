@@ -18,7 +18,7 @@ class User:
         self.registered = datetime.today()
         self.isAdmin = admin
         self.password = generate_password_hash(kwargs['password'])
-        count+=0
+        count+=1
 
     def json_format(self):
         format = {
@@ -33,3 +33,9 @@ class User:
             "isAdmin": self.isAdmin
         }
         return format
+
+    def user_data(self, data):
+        return User(firstname = data['firstname'], lastname = data['lastname'],
+        othernames = data['othernames'], email = data['email'], phoneNumber = data['phoneNumber'],
+         username = data['username'], password = data['password'])
+         

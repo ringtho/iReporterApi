@@ -1,5 +1,6 @@
 from flask import Flask, jsonify, request
 from api.models import RedFlag
+from api.user import User
 from api.validator import Validator
 
 
@@ -24,7 +25,7 @@ def create_redflag():
         return jsonify({"status": 201, "data": [{ "id": redflags[-1]["id"],
         "message": "red flag record created."}]}), 201
     else:
-        return jsonify({"status": 400, "Error": validator.error})
+        return jsonify({"status": 400, "Error": validator.error}), 400
  
 @app.route("/api/v1/red-flags", methods=["GET"])
 def get_redflags():
@@ -67,6 +68,20 @@ def delete_redflag(red_flag_id):
             "data":[{"id": redflag['id'],"message":"red-flag record has been deleted"}]
             })
     return jsonify({"status": 404, "Error": f"The red flag record with id {red_flag_id} doesnt exist"}),404
+
+@app.route("/api/v1/auth/signup", methods=["POST"])
+def create_user():
+    validator = Validator(request)
+    data = request.get_json()
+    if validator.validate_user_data():
+        user = User(firstname = data['firstname'], lastname = data['lastname'],
+        othernames = data['othernames'], email = data['email'], phoneNumber = data['phoneNumber'],
+        username = data['username'], password = data['password'])
+        users.append(user.json_format())
+        return jsonify({"status": 201, "data":[{"id": users[-1]["id"], 
+        "message":"User successfully created"}]}),201
+    return jsonify({"status": 400, "Error": validator.error})
+        
 
 @app.errorhandler(404)
 def page_doesnt_exist(e):

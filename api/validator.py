@@ -26,9 +26,16 @@ class Validator:
             'createdBy should be an integer'
         )
 
-    def validate_user_data(self, user_data):
-        assert isinstance(user_data, dict),'Ensure to enter registration details in json format'
-        self.ensure_no_empty_fields_user(user_data)
+    def validate_user_data(self):
+        try:
+            user_data = self.request.get_json()
+            assert isinstance(user_data, dict),'Ensure to enter registration details in json format'
+            self.ensure_no_empty_fields_user(user_data)
+            self.ensure_items_correct_datatype(user_data)
+            return True
+        except Exception as e:
+            self.error = str(e)
+            return False
 
     def ensure_no_empty_fields_user(self, user_data):
         assert 'firstname' in user_data, 'Firstname not specified'
@@ -38,5 +45,19 @@ class Validator:
         assert 'phoneNumber' in user_data, 'phoneNumber not specified'
         assert 'username' in user_data, 'username not specified'
         assert 'password' in user_data, 'password not specified'
+
+    def ensure_items_correct_datatype(self, user_data):
+        assert isinstance(user_data["phoneNumber"], str), 'phoneNumber should be a string!'
+        assert isinstance(user_data["email"], str), 'Email should be a string!!'
+        assert isinstance(user_data["username"], str), 'Username should be a string'
+        assert isinstance(user_data["firstname"], str), 'Firstname should be a string!!'
+        assert isinstance(user_data["lastname"], str), 'Lastname should be string'
+        assert isinstance(user_data["othernames"], str), 'Othernames should be a string'
+
+
+
+    # def user_not_exist(self, id):
+    #     user = self.request.get_json()
+
 
         
