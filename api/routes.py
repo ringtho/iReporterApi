@@ -50,6 +50,7 @@ def get_single_redflag(red_flag_id):
     return jsonify({"status": 404, "Error": "A redflag with an id of {} doesnt exist".format(red_flag_id)}),404   
        
 @app.route("/api/v1/red-flags/<int:red_flag_id>/<string:query>", methods=['PATCH'])
+@required_token
 def edit_location(red_flag_id, query):
     for redflag in redflags:
         if redflag["id"] == red_flag_id:
