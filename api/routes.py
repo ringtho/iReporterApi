@@ -2,11 +2,11 @@ from flask import Flask, jsonify, request, json
 from api.models import RedFlag
 from api.user import (User, users, get_user)
 from api.validator import Validator
+from api.resources.auth import encode_token
 from werkzeug.security import generate_password_hash, check_password_hash
 
 
 app = Flask(__name__)
-# app.config['JWT_SECRET_KEY'] = 'secret-key'
 
 redflags = []
 
@@ -92,19 +92,23 @@ def create_user():
 def login_user():
     data = request.get_json()
     if not data:
+    
         return jsonify({"Error": "Please provide some data!"})
-   
+    
     username = data["username"]
     password = data["password"]
+
  
     response = get_user(username, password)
-    print(response)
+    _id = response["id"]
+    token = encode_token(_id,username)
+   
     if response:
         return jsonify({
             "status": 200, "data": [{
             "username": response["username"],
             "message": "Logged in successfully",
-            "token": "token"
+            "token": token
             }]
         })
     return jsonify({ "status": 400, "message": "Incorrect username or password"}) 
