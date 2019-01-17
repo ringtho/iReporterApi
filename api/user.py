@@ -2,6 +2,7 @@ from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
 
 count = 1
+users = []
 
 class User:
 
@@ -20,6 +21,7 @@ class User:
         self.password = generate_password_hash(kwargs['password'])
         count+=1
 
+
     def json_format(self):
         format = {
             "id": self.id,
@@ -34,8 +36,10 @@ class User:
         }
         return format
 
-    def user_data(self, data):
-        return User(firstname = data['firstname'], lastname = data['lastname'],
-        othernames = data['othernames'], email = data['email'], phoneNumber = data['phoneNumber'],
-         username = data['username'], password = data['password'])
+def get_user(username, password):
+    for user in users:
+        if user.username == username and check_password_hash(user.password, password):
+            return user
+        return None
+
          

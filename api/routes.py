@@ -1,13 +1,12 @@
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, json
 from api.models import RedFlag
-from api.user import User
+from api.user import (User, users, get_user)
 from api.validator import Validator
+from werkzeug.security import generate_password_hash, check_password_hash
 
 
 app = Flask(__name__)
-
 redflags = []
-users = []
 
 @app.route("/")
 def hello():
@@ -69,7 +68,7 @@ def delete_redflag(red_flag_id):
             })
     return jsonify({"status": 404, "Error": f"The red flag record with id {red_flag_id} doesnt exist"}),404
 
-@app.route("/api/v1/auth/signup", methods=["POST"])
+@app.route("/api/v1/auth/register", methods=["POST"])
 def create_user():
     validator = Validator(request)
     data = request.get_json()
@@ -81,7 +80,25 @@ def create_user():
         return jsonify({"status": 201, "data":[{"id": users[-1]["id"], 
         "message":"User successfully created"}]}),201
     return jsonify({"status": 400, "Error": validator.error})
-        
+
+@app.route("/api/v1/auth/login", methods=["POST"])
+def login_user():
+    data = request.get_json()
+    if not data:
+        return jsonify({"Error": "Please provide some data!"})
+
+    
+    username = data["username"]
+    password = data["password"]
+
+    response = get_user(username, password)
+    if response:
+        return jsonify({
+            "status": 200, "message": "Logged in successfully"
+        })
+    return jsonify({ "status": 400, "message": "Incorrect username or password"}) 
+
+     
 
 @app.errorhandler(404)
 def page_doesnt_exist(e):
