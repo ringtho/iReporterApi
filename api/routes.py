@@ -90,6 +90,7 @@ def login_user():
     data = request.get_json()
     if not data:
         return jsonify({"Error": "Please provide some data!"})
+   
     username = data["username"]
     password = data["password"]
  
@@ -97,8 +98,10 @@ def login_user():
     print(response)
     if response:
         return jsonify({
-            "status": 200, "data": [{"message": "Logged in successfully",
-            "id": response["id"]}]
+            "status": 200, "data": [{
+            "username": response["username"],
+            "message": "Logged in successfully",
+            }]
         })
     return jsonify({ "status": 400, "message": "Incorrect username or password"}) 
 
