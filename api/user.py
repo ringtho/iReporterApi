@@ -1,5 +1,6 @@
 from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
+from flask import jsonify
 
 count = 1
 users = []
@@ -38,10 +39,14 @@ class User:
         return format
 
 def get_user(username, password):
-    for user in users:
-        if user["username"] == username and check_password_hash(user["password"], password):
-            return user
-
+    try:
+        for user in users:
+            if user["username"] == username and check_password_hash(user["password"], password):
+                return user
+    except Exception as e:
+        error = str(e)
+        return error
+    
 
 
 
