@@ -17,6 +17,7 @@ def hello():
     return jsonify({"status": 200,"message":"Hello World, it's Smith!!"}),200
 
 @app.route("/api/v1/red-flags" ,methods=["POST"])
+@required_token
 def create_redflag():
     validator = Validator(request)
     if validator.redflag_is_valid():
@@ -65,6 +66,7 @@ def edit_location(red_flag_id, query):
     return jsonify({"status": 404, "Error": f"Non existent redflag. Id {red_flag_id} doesnt exist!"}),404
 
 @app.route("/api/v1/red-flags/<int:red_flag_id>" ,methods=['DELETE'])
+@required_token
 def delete_redflag(red_flag_id):
     for redflag in redflags:
         if redflag['id'] == red_flag_id:
