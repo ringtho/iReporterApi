@@ -54,10 +54,27 @@ class Validator:
         assert isinstance(user_data["lastname"], str), 'Lastname should be string'
         assert isinstance(user_data["othernames"], str), 'Othernames should be a string'
 
+    
+    # def check_user_exists(self,user_data):
+    #     print(users)
+    #     for user in users:
+    #         username = user_data["username"]
+    #         email = user_data["email"]
+    #         smith = user["username"] 
+    #         print(smith)
+    #         print(username)
+    #         if user["username"] == username:
+    #             username_exists = {"status": 200, "Error": "The username '{}' already exists!!".format(username)}
+    #             return username_exists
+    #         elif user["email"] == email:
+    #             email_exists = {"status":200, "Error":"{} exists. Please Login".format(email) }
+    #             return email_exists
+    #         else:
+    #             return None
 
 
-    # def user_not_exist(self, id):
-    #     user = self.request.get_json()
+
+
 
 
         

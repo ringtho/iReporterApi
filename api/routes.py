@@ -75,10 +75,14 @@ def create_user():
     if validator.validate_user_data():
         user = User(firstname = data['firstname'], lastname = data['lastname'],
         othernames = data['othernames'], email = data['email'], phoneNumber = data['phoneNumber'],
-        username = data['username'], password = data['password'])
-        users.append(user.json_format())
-        return jsonify({"status": 201, "data":[{"id": users[-1]["id"], 
-        "message":"User successfully created"}]}),201
+        username = data['username'], password = generate_password_hash(data['password']))
+        new_user = user.json_format()
+        users.append(new_user)
+        return jsonify({"status": 201, "data":[{"user": {
+            "id": users[-1]["id"],
+            "username": users[-1]["username"]
+        },
+           "message":"User successfully created"}]}),201
     return jsonify({"status": 400, "Error": validator.error})
 
 @app.route("/api/v1/auth/login", methods=["POST"])
@@ -86,15 +90,15 @@ def login_user():
     data = request.get_json()
     if not data:
         return jsonify({"Error": "Please provide some data!"})
-
-    
     username = data["username"]
     password = data["password"]
-
+ 
     response = get_user(username, password)
+    print(response)
     if response:
         return jsonify({
-            "status": 200, "message": "Logged in successfully"
+            "status": 200, "data": [{"message": "Logged in successfully",
+            "id": response["id"]}]
         })
     return jsonify({ "status": 400, "message": "Incorrect username or password"}) 
 

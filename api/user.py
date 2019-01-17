@@ -18,7 +18,7 @@ class User:
         self.username = kwargs['username']
         self.registered = datetime.today()
         self.isAdmin = admin
-        self.password = generate_password_hash(kwargs['password'])
+        self.password = kwargs['password']
         count+=1
 
 
@@ -41,6 +41,6 @@ def get_user(username, password):
     for user in users:
         if user["username"] == username and check_password_hash(user["password"], password):
             return user
-        return None
+
 
          
