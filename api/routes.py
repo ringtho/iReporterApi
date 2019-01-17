@@ -38,6 +38,7 @@ def get_redflags():
     return jsonify({"status": 200, "data": redflags }), 200
 
 @app.route("/api/v1/red-flags/<int:red_flag_id>", methods=["GET"])
+@required_token
 def get_single_redflag(red_flag_id):
     single_redflag = []
     if len(redflags) < 1:
