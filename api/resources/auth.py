@@ -48,7 +48,7 @@ def required_token(func):
         except jwt.InvalidTokenError:
             response = jsonify({
                 "status": 401,
-                "Error": "Invalid token"
+                "Error": "Invalid token. Please provide a valid token"
             })
         return response
     return wrapper
