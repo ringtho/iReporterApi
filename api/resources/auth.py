@@ -21,3 +21,10 @@ def ensure_token_available_and_clean():
         return jsonify({"status": 400, "Error": "Token tampered with!!!"})
     token = header_token.split(" ")[1]
     return token 
+
+def decode_token(token):
+    """
+        Decode the token back to original state before sending
+    """
+    decode = jwt.decode(token, secret_key, algorithms='HS256')
+    return decode
