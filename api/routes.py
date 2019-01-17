@@ -3,6 +3,7 @@ from api.models import RedFlag
 from api.user import (User, users, get_user)
 from api.validator import Validator
 from api.resources.auth import encode_token
+from api.resources.auth import required_token
 from werkzeug.security import generate_password_hash, check_password_hash
 
 
@@ -30,6 +31,7 @@ def create_redflag():
         return jsonify({"status": 400, "Error": validator.error}), 400
  
 @app.route("/api/v1/red-flags", methods=["GET"])
+@required_token
 def get_redflags():
     if len(redflags) < 1:
         return jsonify({"status": 404, "message":"There are no red flags in the database"}), 404

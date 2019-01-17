@@ -9,7 +9,7 @@ def encode_token(user_id, username):
     payload = {
         "uid": user_id,
         "unm": username,
-        'exp': datetime.datetime.utcnow() + datetime.timedelta(days=0, seconds=60),
+        'exp': datetime.datetime.utcnow() + datetime.timedelta(days=0, hours=1),
        
     }
 
