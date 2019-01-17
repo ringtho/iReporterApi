@@ -36,6 +36,7 @@ def create_redflag():
 def get_redflags():
     if len(redflags) < 1:
         return jsonify({"status": 404, "message":"There are no red flags in the database"}), 404
+    # redflags_specific = get_red_flags_specific_user(redflags)
     return jsonify({"status": 200, "data": redflags }), 200
 
 @app.route("/api/v1/red-flags/<int:red_flag_id>", methods=["GET"])
@@ -107,7 +108,8 @@ def login_user():
  
     response = get_user(username, password)
     _id = response["id"]
-    token = encode_token(_id,username)
+    isAdmin = response["isAdmin"]
+    token = encode_token(_id,username, isAdmin)
    
     if response:
         return jsonify({

@@ -5,11 +5,12 @@ from functools import wraps
 
 secret_key = "my_name_is_my_name"
 
-def encode_token(user_id, username):
+def encode_token(user_id, username, isAdmin=False):
     payload = {
         "uid": user_id,
         "unm": username,
         'exp': datetime.datetime.utcnow() + datetime.timedelta(days=0, hours=1),
+        'adm': isAdmin
        
     }
 
@@ -52,4 +53,31 @@ def required_token(func):
             })
         return response
     return wrapper
+
+def admin_or_user():
+    """
+        check if a user is an admin or not
+    """
+    user = decode_token(ensure_token_available_and_clean())
+    user_type = user["adm"]
+    return user_type
+
+def check_user_id():
+    user = decode_token(ensure_token_available_and_clean())
+    user_id = user["uid"]
+    return user_id
+
+# def admin_required(func):
+#     @wraps(func)
+#     def wrapper(*args, **kwargs):
+#         if not admin_or_user():
+#             response = {
+#                 "status": 403,
+#                 "Error": "Admin priviledges required to access this resource!"
+#             }
+#             return response
+#         return func(*args, **kwargs)
+#     return wrapper
+
+
 
