@@ -6,7 +6,10 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 
 app = Flask(__name__)
+# app.config['JWT_SECRET_KEY'] = 'secret-key'
+
 redflags = []
+
 
 @app.route("/")
 def hello():
@@ -101,6 +104,7 @@ def login_user():
             "status": 200, "data": [{
             "username": response["username"],
             "message": "Logged in successfully",
+            "token": "token"
             }]
         })
     return jsonify({ "status": 400, "message": "Incorrect username or password"}) 
