@@ -37,7 +37,7 @@ class TestRedFlags(unittest.TestCase):
         self.assertEqual(data["status"], 200)
 
     # def test_empty_database(self):
-    #     response = self.test_client.get("/api/v1/red-flags")
+    #     response = self.test_client.get("/api/v1/red-flags", headers=dict(Authorization='Bearer '+ GetTokenTests.get_user_post(self)))
     #     self.assertEqual(response.status_code, 404)
     #     data = json.loads(response.data)
     #     self.assertIn(data["message"], "There are no red flags in the database")
@@ -52,29 +52,30 @@ class TestRedFlags(unittest.TestCase):
         self.assertEqual(data["status"],201)
 
     # def test_get_all_redflags(self):
-    #     response = self.test_client.post("/api/v1/red-flags", json=self.incidents)
-    #     response1 = self.test_client.post("/api/v1/red-flags", json=self.incident)
+    #     response = self.test_client.post("/api/v1/red-flags",headers=dict(Authorization='Bearer '+ GetTokenTests.get_user_post(self)), json=self.incidents)
+    #     response1 = self.test_client.post("/api/v1/red-flags",headers=dict(Authorization='Bearer '+ GetTokenTests.get_user_post(self)), json=self.incident)
     #     self.assertEqual(response.status_code, 201)
     #     self.assertIn(response.json["data"][0]["message"], "red flag record created.")
     #     self.assertIn(response1.json["data"][0]["message"], "red flag record created.")
-    #     res = self.test_client.get("/api/v1/red-flags")
+    #     res = self.test_client.get("/api/v1/red-flags",headers=dict(Authorization='Bearer '+ GetTokenTests.get_user_post(self)),)
     #     data = json.loads(res.data)
+    #     print(data)
     #     self.assertEqual(res.status_code, 200)
     #     self.assertIn("accepted", data["data"][0]["status"])
     #     self.assertIn("rejected", data["data"][1]["status"])
     #     self.assertEqual(data["data"][0]["images"], ["image.jpg","image2"])
     #     self.assertEqual(len(data), 2)
 
-    # def test_get_single_redflag(self):
-    #     response = self.test_client.post("/api/v1/red-flags", json=self.incident)
-    #     self.assertEqual(response.status_code, 201)
-    #     self.assertIn(response.json["data"][0]["message"], "red flag record created.")
-    #     res = self.test_client.get("/api/v1/red-flags/{}".format(response.json["data"][0]["id"]))
-    #     data = json.loads(res.data)
-    #     # print(data)
-    #     self.assertEqual(res.status_code, 200)
-    #     self.assertIn(data["data"][0]["status"], "rejected")
-    #     self.assertIn(data["data"][0]["location"], "kampala")
+    def test_get_single_redflag(self):
+        response = self.test_client.post("/api/v1/red-flags",headers=dict(Authorization='Bearer '+ GetTokenTests.get_user_post(self)), json=self.incident)
+        self.assertEqual(response.status_code, 201)
+        self.assertIn(response.json["data"][0]["message"], "red flag record created.")
+        res = self.test_client.get("/api/v1/red-flags/{}".format(response.json["data"][0]["id"]),headers=dict(Authorization='Bearer '+ GetTokenTests.get_user_post(self)))
+        data = json.loads(res.data)
+        print(data)
+        self.assertEqual(res.status_code, 200)
+        self.assertIn(data["data"][0]["status"], "rejected")
+        self.assertIn(data["data"][0]["location"], "kampala")
 
     # def test_edit_location(self):
     #     response = self.test_client.post("/api/v1/red-flags", json=self.incident)
