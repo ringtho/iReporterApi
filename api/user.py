@@ -32,13 +32,14 @@ class User:
             "phoneNumber": self.phoneNumber,
             "username": self.username,
             "registered": self.registered,
-            "isAdmin": self.isAdmin
+            "isAdmin": self.isAdmin,
+            "password": self.password
         }
         return format
 
 def get_user(username, password):
     for user in users:
-        if user.username == username and check_password_hash(user.password, password):
+        if user["username"] == username and check_password_hash(user["password"], password):
             return user
         return None
 
