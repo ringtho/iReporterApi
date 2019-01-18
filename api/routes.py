@@ -108,11 +108,12 @@ def login_user():
  
     response = get_user(username, password)
     print(response)
-    _id = response["id"]
-    isAdmin = response["isAdmin"]
-    token = encode_token(_id,username, isAdmin)
+   
    
     if response:
+        _id = response["id"]
+        isAdmin = response["isAdmin"]
+        token = encode_token(_id,username, isAdmin)
         return jsonify({
             "status": 201, "data": [{
             "username": response["username"],
@@ -120,7 +121,7 @@ def login_user():
             "token": token
             }]
         }), 201
-    return jsonify({ "status": 400, "Error": response}) 
+    return jsonify({ "status": 400, "Error": "Invalid Username or Password"}) 
 
      
 

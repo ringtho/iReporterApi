@@ -1,6 +1,6 @@
 from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
-from flask import jsonify
+from flask import jsonify, abort
 
 count = 1
 users = []
@@ -45,7 +45,7 @@ def get_user(username, password):
                 return user
     except Exception as e:
         error = str(e)
-        return error
+        abort(400,{"message": "Invalid Username or Password"})
     
 
 
