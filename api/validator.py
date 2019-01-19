@@ -52,6 +52,7 @@ class Validator:
             self.check_user_non_existent(user_data["username"])
             self.validate_email_address(user_data["email"])
             self.validate_password(user_data["password"])
+            self.validate_phone_number(user_data["phoneNumber"])
             return True
         except Exception as e:
             self.error = str(e)
@@ -111,9 +112,14 @@ class Validator:
         password_is_valid = len(checks) == 0 and 8 <= len(password) <= 12
         error_message = (
             'Password must contain atleast one lowercase letter, one uppercase letter,'
-            ' a digit and be 6 to 12 characters long!'
+            ' a digit and be 8 to 12 characters long!'
         )
         assert password_is_valid, error_message  
+
+    def validate_phone_number(self, phone):
+        assert isinstance(phone, str), 'Telephone contact must be a string!'
+        telephone_pattern = re.compile(r'\+[0-9]{3}-[0-9]{9}$')
+        assert telephone_pattern.match(phone.strip()), 'Telephone contact is invalid!'
        
 
 
