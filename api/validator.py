@@ -24,8 +24,10 @@ class Validator:
 
     def ensure_valid_data_types(self, redflag):
         assert isinstance(redflag['createdBy'], int), (
-            'createdBy should be an integer'
-        )
+        'createdBy should be an integer')
+        assert isinstance(redflag["location"], dict), (
+        "Location should be a dictionary containing latitude and longitude coordinates!")
+        
 
     def validate_user_data(self):
         try:
