@@ -12,14 +12,16 @@ class TestRedFlags(unittest.TestCase):
        
         "createdBy": 1, 
         "types":"redflag", 
-        "location":"kampala", 
+        "location":{"Latitude": "0.321", "Longitude": "35.145"}, 
         "status": "rejected", 
         "images": "image.jpg", 
         "videos": "videos.org", 
         "comment": "my name is"
         }
-        self.incidents = { "createdBy": 1, "types":"redflag", "location":"Arua", 
-        "status": "accepted", "images": ["image.jpg","image2"], "videos": ["videos.mp4","smith.mkv"], 
+        self.incidents = { "createdBy": 1, "types":"redflag", 
+        "location":{"Latitude": "0.3245", "Longitude": "40.687"}, 
+        "status": "accepted", "images": ["image.jpg","image2"], 
+        "videos": ["videos.mp4","smith.mkv"], 
         "comment": "The most corrupt official ever"}
 
     def tearDown(self):
@@ -61,7 +63,7 @@ class TestRedFlags(unittest.TestCase):
         self.assertIn(response1.json["data"][0]["message"], "red flag record created.")
         res = self.test_client.get("/api/v1/red-flags",headers=dict(Authorization='Bearer '+ GetTokenTests.get_user_post(self)),)
         data = json.loads(res.data)
-        print(data)
+        # print(data)
         self.assertEqual(res.status_code, 200)
         self.assertIn("accepted", data["data"][0]["status"])
         self.assertIn("rejected", data["data"][1]["status"])
@@ -76,21 +78,21 @@ class TestRedFlags(unittest.TestCase):
         res = self.test_client.get("/api/v1/red-flags/{}".format(response.json["data"][0]["id"]),
         headers=dict(Authorization='Bearer '+ GetTokenTests.get_user_post(self)))
         data = json.loads(res.data)
-        print(data)
+        # print(data)
         self.assertEqual(res.status_code, 200)
         self.assertIn(data["data"][0]["status"], "rejected")
-        self.assertIn(data["data"][0]["location"], "kampala")
+        self.assertIn(data["data"][0]["location"]["Latitude"], "0.321" )
 
     def test_edit_location(self):
         response = self.test_client.post("/api/v1/red-flags",
         headers=dict(Authorization='Bearer '+ GetTokenTests.get_user_post(self)), json=self.incident)
         self.assertEqual(response.status_code, 201)
-        location = {"location": "mutungo"}
+        location = {"location": {"Latitude": "5.056", "Longitude":"56.234"}}
         res = self.test_client.patch("/api/v1/red-flags/{}/location"
         .format(response.json["data"][0]["id"]) ,
         headers=dict(Authorization='Bearer '+ GetTokenTests.get_user_post(self)),json=location)
         data = json.loads(res.data)
-        print(data)
+        # print(data)
         self.assertIn(data["data"][0]["message"], "Updated red-flag record's location")
         self.assertEqual(res.status_code, 200)
         
@@ -98,11 +100,11 @@ class TestRedFlags(unittest.TestCase):
         response = self.test_client.post("/api/v1/red-flags",
         headers=dict(Authorization='Bearer '+ GetTokenTests.get_user_post(self)), json=self.incident)
         self.assertEqual(response.status_code, 201)
-        comment = {"comment": "Museveni is so corrupt"}
+        comment = {"comment": "Museveni is so corrupt","location": {"Latitude": "5.056", "Longitude":"56.234"}}
         res = self.test_client.patch("/api/v1/red-flags/{}/comment".format(response.json["data"][0]["id"]),
         headers=dict(Authorization='Bearer '+ GetTokenTests.get_user_post(self)),json=comment)
         data =json.loads(res.data)
-        print(data)
+        # print(data)
         self.assertIn(data["data"][0]["message"], "Updated red-flag record's comment")
         self.assertEqual(res.status_code, 200)
       
@@ -133,7 +135,7 @@ class TestRedFlags(unittest.TestCase):
         response = self.test_client.post("/api/v1/auth/register",json=user)
         self.assertEqual(response.status_code, 201)
         data = json.loads(response.data)
-        print(data)
+        # print(data)
         self.assertEqual(data["status"], 201)
         self.assertEqual(data["data"][0]["message"], "User successfully created")
         self.assertEqual(data["data"][0]["user"]["username"], "sringtho1")
@@ -152,7 +154,7 @@ class TestRedFlags(unittest.TestCase):
         response = self.test_client.post("/api/v1/auth/register",json=user)
         self.assertEqual(response.status_code, 200)
         data = json.loads(response.data)
-        print(data)
+        # print(data)
         self.assertEqual(data["status"], 400)
         self.assertEqual(data["Error"], "username not specified")
 
@@ -176,7 +178,7 @@ class TestRedFlags(unittest.TestCase):
             }
         response=self.test_client.post("/api/v1/auth/login" ,json=user_login)
         data = json.loads(response.data)
-        print(data)
+        # print(data)
         self.assertEqual(response.status_code, 201)
         self.assertEqual(data["status"], 201)
         self.assertEqual(data["data"][0]["message"], "Logged in successfully")
@@ -210,13 +212,13 @@ class TestRedFlags(unittest.TestCase):
 
 
     def test_createdBy_string(self):
-        incident = { "createdBy": "user", "types":"redflag", "location":"Arua", 
+        incident = { "createdBy": "user", "types":"redflag", "location":{"Latitude": "5.056", "Longitude":"56.234"}, 
         "status": "accepted", "images": ["image.jpg","image2"], "videos": ["videos.mp4","smith.mkv"], 
         "comment": "The most corrupt official ever"}
         response = self.test_client.post("/api/v1/red-flags",content_type='application/json',
         headers=dict(Authorization='Bearer '+ GetTokenTests.get_user_post(self)), json=incident)
         data = json.loads(response.data)
-        print(data)
+        # print(data)
         self.assertEqual(response.status_code, 400)
         self.assertEqual(data["Error"], "createdBy should be an integer")
        
@@ -224,7 +226,7 @@ class TestRedFlags(unittest.TestCase):
         response = self.test_client.delete("/api/v1/red-flags/2",
         headers=dict(Authorization='Bearer '+ GetTokenTests.get_user_post(self)))
         data = json.loads(response.data)
-        print(data)
+        # print(data)
         self.assertEqual(response.status_code, 404)
         self.assertEqual(data["status"], 404)
         self.assertIn("The red flag record with id 2 doesnt exist", data["Error"])
@@ -233,11 +235,11 @@ class TestRedFlags(unittest.TestCase):
         response = self.test_client.post("/api/v1/red-flags",
          headers=dict(Authorization='Bearer '+ GetTokenTests.get_user_post(self)), json=self.incident)
         self.assertEqual(response.status_code, 201)
-        location = {"location": "mutungo"}
+        location = {"location": {"Latitude": "5.056", "Longitude":"56.234"}}
         response = self.test_client.patch("/api/v1/red-flags/2/location" ,
         headers=dict(Authorization='Bearer '+ GetTokenTests.get_user_post(self)),json=location)
         data = json.loads(response.data)
-        print(data)
+        # print(data)
         self.assertEqual(data["status"], 404)
         self.assertIn("Non existent redflag", data["Error"])
 
@@ -245,10 +247,12 @@ class TestRedFlags(unittest.TestCase):
         response = self.test_client.post("/api/v1/red-flags",
         headers=dict(Authorization='Bearer '+ GetTokenTests.get_user_post(self)), json=self.incident)
         self.assertEqual(response.status_code, 201)
-        response = self.test_client.patch("/api/v1/red-flags/{}/locationsa"
+        location = {"location": {"Latitude": "5.056", "Longitude":"56.234"}}
+        response = self.test_client.patch("/api/v1/red-flags/{}/locations"
         .format(response.json["data"][0]["id"]),
-        headers=dict(Authorization='Bearer '+ GetTokenTests.get_user_post(self)))
+        headers=dict(Authorization='Bearer '+ GetTokenTests.get_user_post(self)), json=location)
         data = json.loads(response.data)
+        print(data)
         self.assertEqual(response.status_code, 404)
         self.assertEqual(data["status"], 404)
         self.assertIn("The url you provided doesnt exist", data["message"])

@@ -123,7 +123,7 @@ def login_user():
             "token": token
             }]
         }), 201
-    return jsonify({ "status": 400, "Error": "Invalid Username or Password"}) 
+    return jsonify({ "status": 400, "Error": "Invalid Username or Password"}), 400 
 
      
 
