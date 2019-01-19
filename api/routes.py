@@ -10,6 +10,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 app = Flask(__name__)
 
 redflags = []
+validator = Validator(request)
 
 
 @app.route("/")
@@ -53,7 +54,6 @@ def get_single_redflag(red_flag_id):
 @app.route("/api/v1/red-flags/<int:red_flag_id>/<string:query>", methods=['PATCH'])
 @required_token
 def edit_location(red_flag_id, query):
-    validator = Validator(request)
     if validator.valid_location_for_edit():
         for redflag in redflags:
             if redflag["id"] == red_flag_id:
@@ -99,31 +99,32 @@ def create_user():
 
 @app.route("/api/v1/auth/login", methods=["POST"])
 def login_user():
+    
     data = request.get_json()
-    if not data:
-    
-        return jsonify({"Error": "Please provide some data!"})
-    
-    username = data["username"]
-    password = data["password"]
+    if len(users) < 1:
+        return jsonify({"status": 400, "Error": "Non existent user"})
 
- 
-    response = get_user(username, password)
-    print(response)
-   
-   
-    if response:
-        _id = response["id"]
-        isAdmin = response["isAdmin"]
-        token = encode_token(_id,username, isAdmin)
-        return jsonify({
-            "status": 201, "data": [{
-            "username": response["username"],
-            "message": "Logged in successfully",
-            "token": token
-            }]
-        }), 201
-    return jsonify({ "status": 400, "Error": "Invalid Username or Password"}), 400 
+    if not data:
+        return jsonify({"Error": "Please provide some data!"})
+    if validator.validate_login_data():
+        username = data["username"]
+        password = data["password"]
+        response = get_user(username, password)
+        print(response)
+
+        if response:
+            _id = response["id"]
+            isAdmin = response["isAdmin"]
+            token = encode_token(_id,username, isAdmin)
+            return jsonify({
+                "status": 201, "data": [{
+                "username": response["username"],
+                "message": "Logged in successfully",
+                "token": token
+                }]
+            }), 201
+        return jsonify({ "status": 400, "Error": "Invalid Username or Password"}), 400 
+    return jsonify({"status": 400, "Error": validator.error})
 
      
 

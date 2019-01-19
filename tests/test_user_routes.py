@@ -37,7 +37,7 @@ class TestUserRoutes(unittest.TestCase):
         response = self.test_client.post("/api/v1/auth/register",json=self.user)
         self.assertEqual(response.status_code, 201)
         data = json.loads(response.data)
-        # print(data)
+        print(data)
         self.assertEqual(data["status"], 201)
         self.assertEqual(data["data"][0]["message"], "User successfully created")
         self.assertEqual(data["data"][0]["user"]["username"], "sringtho")
@@ -74,3 +74,29 @@ class TestUserRoutes(unittest.TestCase):
         self.assertEqual(response.status_code, 400)
         self.assertEqual(data["status"], 400)
         self.assertEqual(data["Error"], "Invalid Username or Password")
+
+    def test_user_missing_login_password(self):
+        response = self.test_client.post("/api/v1/auth/register",json=self.user)
+        self.assertEqual(response.status_code, 201)
+        login = {
+            "username":"sringtho1"
+        }
+        response=self.test_client.post("/api/v1/auth/login" ,json=login)
+        data = json.loads(response.data)
+        print(data)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(data["status"], 400)
+        self.assertEqual(data["Error"], "password not specified")
+
+    def test_user_missing_login_username(self):
+        response = self.test_client.post("/api/v1/auth/register",json=self.user)
+        self.assertEqual(response.status_code, 201)
+        login = {
+            "password":"sringtho1"
+        }
+        response=self.test_client.post("/api/v1/auth/login" ,json=login)
+        data = json.loads(response.data)
+        print(data)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(data["status"], 400)
+        self.assertEqual(data["Error"], "username not specified")

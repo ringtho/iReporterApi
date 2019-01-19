@@ -41,8 +41,6 @@ class Validator:
         assert isinstance(redflag["location"], dict), (
         "Location should be a dictionary containing latitude and longitude coordinates!")
 
-        
-
     def validate_user_data(self):
         try:
             user_data = self.request.get_json()
@@ -77,6 +75,22 @@ class Validator:
         for user in users:
             if username in user:
                 raise Exception('{} already exists!'.format(username))
+    
+    def validate_login_data(self):
+        try:
+            user_data = self.request.get_json()
+            self.ensure_no_empty_fields_login(user_data)
+            return True
+        except Exception as e:
+            self.error = str(e)
+            return False
+
+
+    def ensure_no_empty_fields_login(self,user_data):
+        assert 'username' in user_data, 'username not specified'
+        assert 'password' in user_data, 'password not specified'
+        assert isinstance(user_data, dict),'Ensure to enter login details in json format'
+       
 
 
 

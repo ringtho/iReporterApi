@@ -39,13 +39,11 @@ class User:
         return format
 
 def get_user(username, password):
-    try:
-        for user in users:
-            if user["username"] == username and check_password_hash(user["password"], password):
-                return user
-    except Exception as e:
-        error = str(e)
-        abort(400,{"message": "Invalid Username or Password"})
+
+    for user in users:
+        if user["username"] == username and check_password_hash(user["password"], password):
+            return user
+ 
     
 
 
