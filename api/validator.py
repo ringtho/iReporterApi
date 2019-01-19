@@ -49,10 +49,10 @@ class Validator:
             assert isinstance(user_data, dict),'Ensure to enter registration details in json format'
             self.ensure_no_empty_fields_user(user_data)
             self.ensure_items_correct_datatype(user_data)
-            self.check_user_non_existent(user_data["username"])
             self.validate_email_address(user_data["email"])
             self.validate_password(user_data["password"])
             self.validate_phone_number(user_data["phoneNumber"])
+            self.check_if_user_exists_already(user_data["username"])
             return True
         except Exception as e:
             self.error = str(e)
@@ -75,11 +75,6 @@ class Validator:
         assert isinstance(user_data["lastname"], str), 'Lastname should be string'
         assert isinstance(user_data["othernames"], str), 'Othernames should be a string'
 
-    
-    def check_user_non_existent(self, username):
-        for user in users:
-            if username in user:
-                raise Exception('{} already exists!'.format(username))
     
     def validate_login_data(self):
         try:
@@ -120,6 +115,12 @@ class Validator:
         assert isinstance(phone, str), 'Telephone contact must be a string!'
         telephone_pattern = re.compile(r'\+[0-9]{12}$')
         assert telephone_pattern.match(phone.strip()), 'Telephone contact is invalid!'
+    
+    def check_if_user_exists_already(self, username):
+        for user in users:
+            if username in user:
+                raise Exception(f'{username} already exists!!')
+
        
 
 
