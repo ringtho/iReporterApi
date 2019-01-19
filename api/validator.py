@@ -52,7 +52,7 @@ class Validator:
             self.validate_email_address(user_data["email"])
             self.validate_password(user_data["password"])
             self.validate_phone_number(user_data["phoneNumber"])
-            self.check_if_user_exists_already(user_data["username"])
+            self.check_if_user_exists_already(user_data["username"], user_data["email"])
             return True
         except Exception as e:
             self.error = str(e)
@@ -116,10 +116,12 @@ class Validator:
         telephone_pattern = re.compile(r'\+[0-9]{12}$')
         assert telephone_pattern.match(phone.strip()), 'Telephone contact is invalid!'
     
-    def check_if_user_exists_already(self, username):
+    def check_if_user_exists_already(self, username, email):
         for user in users:
             if user['username'] == username:
                 raise Exception(f'{username} already exists')
+            if user["email"] == email:
+                raise Exception(f'{email} already in the system')
        
 
 
