@@ -102,10 +102,10 @@ def login_user():
     
     data = request.get_json()
     if len(users) < 1:
-        return jsonify({"status": 400, "Error": "Non existent user"})
+        return jsonify({"status": 400, "Error": "Non existent user"}),400
 
     if not data:
-        return jsonify({"Error": "Please provide some data!"})
+        return jsonify({"Error": "Please provide some data!"}), 400
     if validator.validate_login_data():
         username = data["username"]
         password = data["password"]
@@ -125,6 +125,24 @@ def login_user():
             }), 201
         return jsonify({ "status": 400, "Error": "Invalid Username or Password"}), 400 
     return jsonify({"status": 400, "Error": validator.error})
+
+@app.route("/api/v1/auth/users",methods=["GET"])
+def get_user_info():
+    if len(users) < 1:
+        return jsonify({"status": 404, "Error": "There are no users in the database"}),404
+    return jsonify({"status": 200,"data": users}), 200
+
+@app.route("/api/v1/auth/users/<int:user_id>", methods=["DELETE"])
+def delete_user(user_id):
+    for user in users:
+        if user['id'] == user_id:
+            users.remove(user)
+            return jsonify({
+            "status": 200,
+            "data":[{"id": user['id'],"message":"{} has been deleted from the system".format(user["username"])}]
+            })
+    return jsonify({"status": 404, "Error": f"The user with id {user_id} doesnt exist"}),404  
+
 
      
 
