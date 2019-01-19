@@ -36,7 +36,6 @@ def create_redflag():
 def get_redflags():
     if len(redflags) < 1:
         return jsonify({"status": 404, "message":"There are no red flags in the database"}), 404
-    # redflags_specific = get_red_flags_specific_user(redflags)
     return jsonify({"status": 200, "data": redflags }), 200
 
 @app.route("/api/v1/red-flags/<int:red_flag_id>", methods=["GET"])
@@ -54,17 +53,20 @@ def get_single_redflag(red_flag_id):
 @app.route("/api/v1/red-flags/<int:red_flag_id>/<string:query>", methods=['PATCH'])
 @required_token
 def edit_location(red_flag_id, query):
-    for redflag in redflags:
-        if redflag["id"] == red_flag_id:
-            data = request.get_json()
-            if (query == "location") or (query == "comment"):
-                redflag[query] = data[query]
-                return jsonify({"status":200, "data": [{"id": red_flag_id,
-                "message": "Updated red-flag record's " + query }]})
-            return jsonify({"status": 404, "message": "The url you provided doesnt exist"
-             ", Try http://127.0.0.1:5000/api/v1/red-flags/1/query where query can be 'comment'"
-             " or 'location'"}),404
-    return jsonify({"status": 404, "Error": f"Non existent redflag. Id {red_flag_id} doesnt exist!"}),404
+    validator = Validator(request)
+    if validator.valid_location_for_edit():
+        for redflag in redflags:
+            if redflag["id"] == red_flag_id:
+                data = request.get_json()
+                if (query == "location") or (query == "comment"):
+                    redflag[query] = data[query]
+                    return jsonify({"status":200, "data": [{"id": red_flag_id,
+                    "message": "Updated red-flag record's " + query }]})
+                return jsonify({"status": 404, "message": "The url you provided doesnt exist"
+                ", Try http://127.0.0.1:5000/api/v1/red-flags/1/query where query can be 'comment'"
+                " or 'location'"}),404
+        return jsonify({"status": 404, "Error": f"Non existent redflag. Id {red_flag_id} doesnt exist!"}),404
+    return jsonify({"status": 400, "Error": validator.error}), 400
 
 @app.route("/api/v1/red-flags/<int:red_flag_id>" ,methods=['DELETE'])
 @required_token

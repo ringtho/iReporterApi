@@ -27,6 +27,20 @@ class Validator:
         'createdBy should be an integer')
         assert isinstance(redflag["location"], dict), (
         "Location should be a dictionary containing latitude and longitude coordinates!")
+
+    def valid_location_for_edit(self):
+        try:
+            redflag = self.request.get_json()
+            self.ensure_valid_location_for_edit(redflag)
+            return True
+        except Exception as e:
+            self.error = str(e)
+            return False
+
+    def ensure_valid_location_for_edit(self, redflag):
+        assert isinstance(redflag["location"], dict), (
+        "Location should be a dictionary containing latitude and longitude coordinates!")
+
         
 
     def validate_user_data(self):
