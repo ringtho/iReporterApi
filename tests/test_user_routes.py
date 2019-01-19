@@ -44,7 +44,7 @@ class TestUserRoutes(unittest.TestCase):
 
     def test_add_user_missing_username(self):
         response = self.test_client.post("/api/v1/auth/register",json=self.user_name)
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 400)
         data = json.loads(response.data)
         # print(data)
         self.assertEqual(data["status"], 400)

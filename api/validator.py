@@ -118,9 +118,8 @@ class Validator:
     
     def check_if_user_exists_already(self, username):
         for user in users:
-            if username in user:
-                raise Exception(f'{username} already exists!!')
-
+            if user['username'] == username:
+                raise Exception(f'{username} already exists')
        
 
 

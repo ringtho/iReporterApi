@@ -95,7 +95,7 @@ def create_user():
             "username": users[-1]["username"]
         },
            "message":"User successfully created"}]}),201
-    return jsonify({"status": 400, "Error": validator.error})
+    return jsonify({"status": 400, "Error": validator.error}),400
 
 @app.route("/api/v1/auth/login", methods=["POST"])
 def login_user():
