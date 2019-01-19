@@ -51,6 +51,7 @@ class Validator:
             self.ensure_items_correct_datatype(user_data)
             self.check_user_non_existent(user_data["username"])
             self.validate_email_address(user_data["email"])
+            self.validate_password(user_data["password"])
             return True
         except Exception as e:
             self.error = str(e)
@@ -99,7 +100,20 @@ class Validator:
         pattern = re.compile(r'[a-zA-Z0-9]+@[a-zA-Z]+\.[a-zA-Z]{2,3}((\.[a-zA-Z]{2,3})+)?$')
         assert pattern.match(email.strip()), 'Invalid Email Address!'
 
-        
+    def validate_password(self, password):
+        assert isinstance(password, str), 'Password must be a string!'
+        checks = {'a-z': str.islower, 'A-Z': str.isupper, '0-9': str.isdigit}
+        for character in password:
+            for key, check in checks.items():
+                if check(character):
+                    del checks[key]
+                    break # move onto the next character
+        password_is_valid = len(checks) == 0 and 8 <= len(password) <= 12
+        error_message = (
+            'Password must contain atleast one lowercase letter, one uppercase letter,'
+            ' a digit and be 6 to 12 characters long!'
+        )
+        assert password_is_valid, error_message  
        
 
 
