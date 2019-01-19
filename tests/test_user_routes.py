@@ -33,6 +33,14 @@ class TestUserRoutes(unittest.TestCase):
             "password": "Sr654321"
         }
 
+    def tearDown(self):
+        response = self.test_client.get('/api/v1/auth/users')
+        data = json.loads(response.data)
+        if 'data' in data:
+            for user in data['data']:
+                self.test_client.delete('/api/v1/auth/users/{}'.format(user['id']))
+
+
     def test_create_user(self):
         response = self.test_client.post("/api/v1/auth/register",json=self.user)
         self.assertEqual(response.status_code, 201)

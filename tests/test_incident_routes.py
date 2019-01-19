@@ -25,7 +25,8 @@ class TestRedFlags(unittest.TestCase):
         "comment": "The most corrupt official ever"}
 
     def tearDown(self):
-        response = self.test_client.get('/api/v1/red-flags',headers=dict(Authorization='Bearer '+ GetTokenTests.get_user_post(self)))
+        response = self.test_client.get('/api/v1/red-flags',
+        headers=dict(Authorization='Bearer '+ GetTokenTests.get_user_post(self)))
         data = json.loads(response.data)
         if 'data' in data:
             for redflag in data['data']:
