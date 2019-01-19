@@ -108,3 +108,27 @@ class TestUserRoutes(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(data["status"], 400)
         self.assertEqual(data["Error"], "username not specified")
+
+    def test_username_already_exists(self):
+        user2 = {"firstname": "smith","lastname": "Ringtho","othernames": "J",
+            "email": "sringtho@yahoo.com","phoneNumber": "+256778339655",
+            "username": "sringtho","password": "Sr654321"}
+        response = self.test_client.post("/api/v1/auth/register", json=self.user)
+        response = self.test_client.post("/api/v1/auth/register", json=user2)
+        data = json.loads(response.data)
+        print(data)
+        self.assertEqual(response.status_code, 400)
+        self.assertIn(data["Error"], "sringtho already exists")
+        self.assertEqual(data["status"], 400)
+
+    def test_email_already_exist(self):
+        user2 = {"firstname": "smith","lastname": "Ringtho","othernames": "J",
+            "email": "sringtho@gmail.com","phoneNumber": "+256778339655",
+            "username": "smith","password": "Sr654321"}
+        response = self.test_client.post("/api/v1/auth/register", json=self.user)
+        response = self.test_client.post("/api/v1/auth/register", json=user2)
+        data = json.loads(response.data)
+        print(data)
+        self.assertEqual(response.status_code, 400)
+        self.assertIn(data["Error"], "sringtho@gmail.com already in the system")
+        self.assertEqual(data["status"], 400)
