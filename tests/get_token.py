@@ -12,7 +12,7 @@ class GetTokenTests:
             "email": "sringtho@gmail.com",
             "phoneNumber": "0778339655",
             "username": "sringtho1",
-            "password": "sr654321"
+            "password": "Sr654321"
 
         }
     
@@ -20,7 +20,7 @@ class GetTokenTests:
         user = {
 
                 "username": "sringtho1",
-                "password": "sr654321"
+                "password": "Sr654321"
 
             }
 

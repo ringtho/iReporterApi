@@ -17,7 +17,7 @@ class TestUserRoutes(unittest.TestCase):
             "email": "sringtho@gmail.com",
             "phoneNumber": "0778339655",
             "username": "sringtho",
-            "password": "sr654321"
+            "password": "Sr654321"
 
         }
         self.user_name={
@@ -26,11 +26,11 @@ class TestUserRoutes(unittest.TestCase):
             "othernames": "J",
             "email": "sringtho@gmail.com",
             "phoneNumber": "0778339655",
-            "password": "sr654321"
+            "password": "Sr654321"
         }
         self.user_login = {
             "username": "sringtho",
-            "password": "sr654321"
+            "password": "Sr654321"
         }
 
     def test_create_user(self):
@@ -66,7 +66,7 @@ class TestUserRoutes(unittest.TestCase):
         self.assertEqual(response.status_code, 201)
         user_login = {
             "username": "smith",
-            "password": "sr654321"
+            "password": "Sr654321"
             }
         response=self.test_client.post("/api/v1/auth/login" ,json=user_login)
         data = json.loads(response.data)
