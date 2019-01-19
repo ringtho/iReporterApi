@@ -1,4 +1,6 @@
 from api.user import users
+import re
+
 class Validator:
     def __init__(self, request):
         self.request = request
@@ -48,6 +50,7 @@ class Validator:
             self.ensure_no_empty_fields_user(user_data)
             self.ensure_items_correct_datatype(user_data)
             self.check_user_non_existent(user_data["username"])
+            self.validate_email_address(user_data["email"])
             return True
         except Exception as e:
             self.error = str(e)
@@ -90,9 +93,14 @@ class Validator:
         assert 'username' in user_data, 'username not specified'
         assert 'password' in user_data, 'password not specified'
         assert isinstance(user_data, dict),'Ensure to enter login details in json format'
+
+    def validate_email_address(self, email):
+        assert isinstance(email, str), 'Email address must be a string!'
+        pattern = re.compile(r'[a-zA-Z0-9]+@[a-zA-Z]+\.[a-zA-Z]{2,3}((\.[a-zA-Z]{2,3})+)?$')
+        assert pattern.match(email.strip()), 'Invalid Email Address!'
+
+        
        
-
-
 
 
 
