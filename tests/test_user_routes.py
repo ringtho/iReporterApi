@@ -15,7 +15,7 @@ class TestUserRoutes(unittest.TestCase):
             "lastname": "Ringtho",
             "othernames": "J",
             "email": "sringtho@gmail.com",
-            "phoneNumber": "0778339655",
+            "phoneNumber": "+256778339655",
             "username": "sringtho",
             "password": "Sr654321"
 
@@ -25,7 +25,7 @@ class TestUserRoutes(unittest.TestCase):
             "lastname": "Ringtho",
             "othernames": "J",
             "email": "sringtho@gmail.com",
-            "phoneNumber": "0778339655",
+            "phoneNumber": "+256778339655",
             "password": "Sr654321"
         }
         self.user_login = {

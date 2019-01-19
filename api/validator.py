@@ -118,7 +118,7 @@ class Validator:
 
     def validate_phone_number(self, phone):
         assert isinstance(phone, str), 'Telephone contact must be a string!'
-        telephone_pattern = re.compile(r'\+[0-9]{3}-[0-9]{9}$')
+        telephone_pattern = re.compile(r'\+[0-9]{12}$')
         assert telephone_pattern.match(phone.strip()), 'Telephone contact is invalid!'
        
 

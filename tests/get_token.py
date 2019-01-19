@@ -10,7 +10,7 @@ class GetTokenTests:
             "lastname": "Ringtho",
             "othernames": "J",
             "email": "sringtho@gmail.com",
-            "phoneNumber": "0778339655",
+            "phoneNumber": "+256778339655",
             "username": "sringtho1",
             "password": "Sr654321"
 
