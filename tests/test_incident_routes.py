@@ -193,5 +193,25 @@ class TestRedFlags(unittest.TestCase):
         self.assertEqual(data["Error"],"Please check to ensure to check that your" 
         " calling the right method!!")
 
+    def test_invalid_token(self):
+        token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1dWQiOjbSI6InNyaW5ndGhvMSIsImV4cCI6MTU0Nzg3NTY0NiwiYWRtIjowfQ._Gw1tIGhVCbk90BDsKnWu6tsiZ2L9FJ0OCecUWgVGJM"
+        response = self.test_client.post("/api/v1/red-flags", 
+        headers=dict(Authorization='Bearer '+ token),content_type='application/json',json=self.incident)
+        data =json.loads(response.data)
+        self.assertEqual(response.status_code, 401)
+        self.assertEqual(data["status"], 401)
+        self.assertEqual(data["Error"], "Invalid token. Please provide a valid token")
+
+    def test_invalid_token_used(self):
+        token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1aWQiOjEsInVubSI6InNyaW5ndGhvMSIsImV4cCI6MTU0Nzg3NTY0NiwiYWRtIjowfQ._Gw1tIGhVCbk90BDsKnWu6tsiZ2L9FJ0OCecUWgVGJM"
+        response = self.test_client.post("/api/v1/red-flags", 
+        headers=dict(Authorization='Bearer '+ token),content_type='application/json',json=self.incident)
+        data =json.loads(response.data)
+        print(data)
+        self.assertEqual(response.status_code, 401)
+        self.assertEqual(data["status"], 401)
+        self.assertEqual(data["Error"], "Token has expired!!")
+
+
 if __name__ == '__main__':
     unittest.main()

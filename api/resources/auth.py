@@ -20,9 +20,9 @@ def encode_token(user_id, username, isAdmin=False):
 def ensure_token_available_and_clean():
     header_token = request.headers.get("Authorization")
     if not header_token:
-        return jsonify({"status": 400, "Error":"Missing token!!"})
+        return jsonify({"status": 400, "Error":"Missing token!!"}),400
     elif "Bearer" not in header_token:
-        return jsonify({"status": 400, "Error": "Token tampered with!!!"})
+        return jsonify({"status": 400, "Error": "Token tampered with!!!"}),400
     token = header_token.split(" ")[1]
     return token 
 
@@ -44,13 +44,13 @@ def required_token(func):
         except jwt.ExpiredSignatureError:
             response = jsonify({
                 "status": 401,
-                "error": "Token has expired!!"
-            })
+                "Error": "Token has expired!!"
+            }),401
         except jwt.InvalidTokenError:
             response = jsonify({
                 "status": 401,
                 "Error": "Invalid token. Please provide a valid token"
-            })
+            }),401
         return response
     return wrapper
 

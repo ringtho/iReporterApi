@@ -132,3 +132,5 @@ class TestUserRoutes(unittest.TestCase):
         self.assertEqual(response.status_code, 400)
         self.assertIn(data["Error"], "sringtho@gmail.com already in the system")
         self.assertEqual(data["status"], 400)
+
+    
