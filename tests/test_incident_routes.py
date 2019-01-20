@@ -14,8 +14,8 @@ class TestRedFlags(unittest.TestCase):
         "types":"redflag", 
         "location":{"Latitude": "0.321", "Longitude": "35.145"}, 
         "status": "rejected", 
-        "images": "image.jpg", 
-        "videos": "videos.org", 
+        "images": ["image.jpg", "image2.jpg"],
+        "videos": ["videos.org","video2.org"], 
         "comment": "my name is"
         }
         self.incidents = { "createdBy": 1, "types":"redflag", 

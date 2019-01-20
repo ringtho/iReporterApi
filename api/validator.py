@@ -29,6 +29,8 @@ class Validator:
         'createdBy should be an integer')
         assert isinstance(redflag["location"], dict), (
         "Location should be a dictionary containing latitude and longitude coordinates!")
+        assert isinstance(redflag["images"], list), ("Images must be of list type")
+        assert isinstance(redflag["videos"], list), ("Videos must be of list type")
 
     def valid_location_for_edit(self):
         try:
@@ -42,6 +44,7 @@ class Validator:
     def ensure_valid_location_for_edit(self, redflag):
         assert isinstance(redflag["location"], dict), (
         "Location should be a dictionary containing latitude and longitude coordinates!")
+     
 
     def validate_user_data(self):
         try:

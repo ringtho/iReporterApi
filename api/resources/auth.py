@@ -67,17 +67,17 @@ def check_user_id():
     user_id = user["uid"]
     return user_id
 
-# def admin_required(func):
-#     @wraps(func)
-#     def wrapper(*args, **kwargs):
-#         if not admin_or_user():
-#             response = {
-#                 "status": 403,
-#                 "Error": "Admin priviledges required to access this resource!"
-#             }
-#             return response
-#         return func(*args, **kwargs)
-#     return wrapper
+def admin_required(func):
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        if not admin_or_user():
+            response = {
+                "status": 403,
+                "Error": "Admin priviledges required to access this resource!"
+            }
+            return response, 403
+        return func(*args, **kwargs)
+    return wrapper
 
 
 
