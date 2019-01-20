@@ -26,6 +26,21 @@ class GetTokenTests:
 
         response = app.test_client().post('/api/v1/auth/login', json=user)
         token = json.loads(response.data)["data"][0]['token']
+        # print(token)
+        return token
+
+    def get_admin_token(self):
+        
+        admin = {
+
+                "username": "admin",
+                "password": "Sr654321"
+
+            }
+
+        response = app.test_client().post('/api/v1/auth/login', json=admin)
+        token = json.loads(response.data)["data"][0]['token']
+        # print(token)
         return token
 
 

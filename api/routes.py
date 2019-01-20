@@ -4,6 +4,7 @@ from api.user import (User, users, get_user)
 from api.validator import Validator
 from api.resources.auth import encode_token
 from api.resources.auth import required_token
+from api.resources.admin_auth import admin_required
 from werkzeug.security import generate_password_hash, check_password_hash
 
 
@@ -127,12 +128,14 @@ def login_user():
     return jsonify({"status": 400, "Error": validator.error})
 
 @app.route("/api/v1/auth/users",methods=["GET"])
+@admin_required
 def get_user_info():
     if len(users) < 1:
         return jsonify({"status": 404, "Error": "There are no users in the database"}),404
     return jsonify({"status": 200,"data": users}), 200
 
 @app.route("/api/v1/auth/users/<int:user_id>", methods=["DELETE"])
+@admin_required
 def delete_user(user_id):
     for user in users:
         if user['id'] == user_id:
