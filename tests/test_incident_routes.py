@@ -1,8 +1,8 @@
 import unittest
-from api.routes import app
+from api.views.routes import app
 from tests.get_token import GetTokenTests
 import json
-from api import routes
+from api.views import routes
 
 class TestRedFlags(unittest.TestCase):
     def setUp(self):
