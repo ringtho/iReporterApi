@@ -1,4 +1,4 @@
-from api.user import users
+from api.models.user import users
 import re
 
 class Validator:
