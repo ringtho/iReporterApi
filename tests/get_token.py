@@ -16,7 +16,7 @@ class GetTokenTests:
 
         }
     
-        response = app.test_client().post('/api/v1/auth/register', json=register_info)
+        response = app.test_client().post('/api/v1/auth/signup', json=register_info)
         user = {
 
                 "username": "sringtho1",
