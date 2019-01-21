@@ -81,7 +81,7 @@ def delete_redflag(red_flag_id):
             })
     return jsonify({"status": 404, "Error": f"The red flag record with id {red_flag_id} doesnt exist"}),404
 
-@app.route("/api/v1/auth/register", methods=["POST"])
+@app.route("/api/v1/auth/signup", methods=["POST"])
 def create_user():
     validator = Validator(request)
     data = request.get_json()
@@ -95,7 +95,7 @@ def create_user():
             "id": users[-1]["id"],
             "username": users[-1]["username"]
         },
-           "message":"User successfully created"}]}),201
+           "token":"token"}]}),201
     return jsonify({"status": 400, "Error": validator.error}),400
 
 @app.route("/api/v1/auth/login", methods=["POST"])
