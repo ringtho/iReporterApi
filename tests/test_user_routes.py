@@ -20,6 +20,10 @@ class TestUserRoutes(unittest.TestCase):
             "password": "Sr654321"
 
         }
+
+        self.user2 = {"firstname": "smith","lastname": "Ringtho","othernames": "J",
+            "email": "sringtho@yahoo.com","phoneNumber": "+256778339655",
+            "username": "smith","password": "Sr654321"}
         self.user_name={
             "firstname": "smith",
             "lastname": "Ringtho",
@@ -83,7 +87,7 @@ class TestUserRoutes(unittest.TestCase):
             }
         response=self.test_client.post("/api/v1/auth/login" ,json=user_login)
         data = json.loads(response.data)
-        print(data)
+        # print(data)
         self.assertEqual(response.status_code, 400)
         self.assertEqual(data["status"], 400)
         self.assertEqual(data["Error"], "Invalid Username or Password")
@@ -96,7 +100,7 @@ class TestUserRoutes(unittest.TestCase):
         }
         response=self.test_client.post("/api/v1/auth/login" ,json=login)
         data = json.loads(response.data)
-        print(data)
+        # print(data)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(data["status"], 400)
         self.assertEqual(data["Error"], "password not specified")
@@ -121,7 +125,7 @@ class TestUserRoutes(unittest.TestCase):
         response = self.test_client.post("/api/v1/auth/register", json=self.user)
         response = self.test_client.post("/api/v1/auth/register", json=user2)
         data = json.loads(response.data)
-        print(data)
+        # print(data)
         self.assertEqual(response.status_code, 400)
         self.assertIn(data["Error"], "sringtho already exists")
         self.assertEqual(data["status"], 400)
@@ -133,12 +137,25 @@ class TestUserRoutes(unittest.TestCase):
         response = self.test_client.post("/api/v1/auth/register", json=self.user)
         response = self.test_client.post("/api/v1/auth/register", json=user2)
         data = json.loads(response.data)
-        print(data)
+        # print(data)
         self.assertEqual(response.status_code, 400)
         self.assertIn(data["Error"], "sringtho@gmail.com already in the system")
         self.assertEqual(data["status"], 400)
+    
+    def test_get_users(self):
+        getter = GetTokenTests()
+        token = getter.get_admin_token()
+        headers={"Authorization":"Bearer " + token}
+        response = self.test_client.post("/api/v1/auth/register", json=self.user)
+        response = self.test_client.post("/api/v1/auth/register", json=self.user2)
+        self.assertEqual(response.status_code, 201)
+        res = self.test_client.get("/api/v1/auth/users", headers=headers)
+        data = json.loads(res.data)
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(data["status"], 200)
+        self.assertEqual(data["data"][1]["firstname"], "smith")
 
-
+ 
 if __name__ == '__main__':
     unittest.main()
     
