@@ -104,7 +104,6 @@ def login_user():
     data = request.get_json()
     if len(users) < 1:
         return jsonify({"status": 400, "Error": "Non existent user"}),400
-
     if not data:
         return jsonify({"Error": "Please provide some data!"}), 400
     if validator.validate_login_data():
@@ -112,18 +111,17 @@ def login_user():
         password = data["password"]
         response = get_user(username, password)
         print(response)
-
         if response:
             _id = response["id"]
             isAdmin = response["isAdmin"]
             token = encode_token(_id,username, isAdmin)
+            response.pop("password")
             return jsonify({
-                "status": 201, "data": [{
-                "username": response["username"],
-                "message": "Logged in successfully",
-                "token": token
+                "status": 200, "data": [{
+                "token": token,
+                "user": response
                 }]
-            }), 201
+            }), 200
         return jsonify({ "status": 400, "Error": "Invalid Username or Password"}), 400 
     return jsonify({"status": 400, "Error": validator.error})
 
