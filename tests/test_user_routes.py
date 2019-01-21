@@ -34,19 +34,23 @@ class TestUserRoutes(unittest.TestCase):
         }
 
     def tearDown(self):
-        response = self.test_client.get('/api/v1/auth/users')
+        getter = GetTokenTests()
+        token = getter.get_admin_token()
+        headers={"Authorization":"Bearer " + token}
+        response = self.test_client.get('/api/v1/auth/users', headers=headers)
         data = json.loads(response.data)
         # print(data)
         if 'data' in data:
             for user in data['data']:
-                self.test_client.delete('/api/v1/auth/users/{}'.format(user['id']))
-
+                if not user['isAdmin']:
+                    self.test_client.delete('/api/v1/auth/users/{}'.format(user['id']),
+                    headers=headers)
 
     def test_create_user(self):
         response = self.test_client.post("/api/v1/auth/register",json=self.user)
         self.assertEqual(response.status_code, 201)
         data = json.loads(response.data)
-        # print(data)
+        print(data)
         self.assertEqual(data["status"], 201)
         self.assertEqual(data["data"][0]["message"], "User successfully created")
         self.assertEqual(data["data"][0]["user"]["username"], "sringtho")
@@ -134,4 +138,7 @@ class TestUserRoutes(unittest.TestCase):
         self.assertIn(data["Error"], "sringtho@gmail.com already in the system")
         self.assertEqual(data["status"], 400)
 
+
+if __name__ == '__main__':
+    unittest.main()
     

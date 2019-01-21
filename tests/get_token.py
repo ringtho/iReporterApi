@@ -40,7 +40,7 @@ class GetTokenTests:
 
         response = app.test_client().post('/api/v1/auth/login', json=admin)
         token = json.loads(response.data)["data"][0]['token']
-        # print(token)
+        print(token)
         return token
 
 
