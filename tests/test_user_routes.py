@@ -51,7 +51,7 @@ class TestUserRoutes(unittest.TestCase):
                     headers=headers)
 
     def test_create_user(self):
-        response = self.test_client.post("/api/v1/auth/register",json=self.user)
+        response = self.test_client.post("/api/v1/auth/signup",json=self.user)
         self.assertEqual(response.status_code, 201)
         data = json.loads(response.data)
         print(data)
@@ -60,7 +60,7 @@ class TestUserRoutes(unittest.TestCase):
         self.assertEqual(data["data"][0]["user"]["username"], "sringtho")
 
     def test_add_user_missing_username(self):
-        response = self.test_client.post("/api/v1/auth/register",json=self.user_name)
+        response = self.test_client.post("/api/v1/auth/signup",json=self.user_name)
         self.assertEqual(response.status_code, 400)
         data = json.loads(response.data)
         # print(data)
@@ -69,7 +69,7 @@ class TestUserRoutes(unittest.TestCase):
 
     def test_login(self):
       
-        response = self.test_client.post("/api/v1/auth/register",json=self.user)
+        response = self.test_client.post("/api/v1/auth/signup",json=self.user)
         self.assertEqual(response.status_code, 201)
         response=self.test_client.post("/api/v1/auth/login" ,json=self.user_login)
         data = json.loads(response.data)
@@ -79,7 +79,7 @@ class TestUserRoutes(unittest.TestCase):
 
 
     def test_incorrect_login_details(self):
-        response = self.test_client.post("/api/v1/auth/register",json=self.user)
+        response = self.test_client.post("/api/v1/auth/signup",json=self.user)
         self.assertEqual(response.status_code, 201)
         user_login = {
             "username": "smith",
@@ -93,7 +93,7 @@ class TestUserRoutes(unittest.TestCase):
         self.assertEqual(data["Error"], "Invalid Username or Password")
 
     def test_user_missing_login_password(self):
-        response = self.test_client.post("/api/v1/auth/register",json=self.user)
+        response = self.test_client.post("/api/v1/auth/signup",json=self.user)
         self.assertEqual(response.status_code, 201)
         login = {
             "username":"sringtho1"
@@ -106,7 +106,7 @@ class TestUserRoutes(unittest.TestCase):
         self.assertEqual(data["Error"], "password not specified")
 
     def test_user_missing_login_username(self):
-        response = self.test_client.post("/api/v1/auth/register",json=self.user)
+        response = self.test_client.post("/api/v1/auth/signup",json=self.user)
         self.assertEqual(response.status_code, 201)
         login = {
             "password":"sringtho1"
@@ -122,8 +122,8 @@ class TestUserRoutes(unittest.TestCase):
         user2 = {"firstname": "smith","lastname": "Ringtho","othernames": "J",
             "email": "sringtho@yahoo.com","phoneNumber": "+256778339655",
             "username": "sringtho","password": "Sr654321"}
-        response = self.test_client.post("/api/v1/auth/register", json=self.user)
-        response = self.test_client.post("/api/v1/auth/register", json=user2)
+        response = self.test_client.post("/api/v1/auth/signup", json=self.user)
+        response = self.test_client.post("/api/v1/auth/signup", json=user2)
         data = json.loads(response.data)
         # print(data)
         self.assertEqual(response.status_code, 400)
@@ -134,8 +134,8 @@ class TestUserRoutes(unittest.TestCase):
         user2 = {"firstname": "smith","lastname": "Ringtho","othernames": "J",
             "email": "sringtho@gmail.com","phoneNumber": "+256778339655",
             "username": "smith","password": "Sr654321"}
-        response = self.test_client.post("/api/v1/auth/register", json=self.user)
-        response = self.test_client.post("/api/v1/auth/register", json=user2)
+        response = self.test_client.post("/api/v1/auth/signup", json=self.user)
+        response = self.test_client.post("/api/v1/auth/signup", json=user2)
         data = json.loads(response.data)
         # print(data)
         self.assertEqual(response.status_code, 400)
@@ -146,8 +146,8 @@ class TestUserRoutes(unittest.TestCase):
         getter = GetTokenTests()
         token = getter.get_admin_token()
         headers={"Authorization":"Bearer " + token}
-        response = self.test_client.post("/api/v1/auth/register", json=self.user)
-        response = self.test_client.post("/api/v1/auth/register", json=self.user2)
+        response = self.test_client.post("/api/v1/auth/signup", json=self.user)
+        response = self.test_client.post("/api/v1/auth/signup", json=self.user2)
         self.assertEqual(response.status_code, 201)
         res = self.test_client.get("/api/v1/auth/users", headers=headers)
         data = json.loads(res.data)
