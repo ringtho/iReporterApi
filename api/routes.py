@@ -115,7 +115,6 @@ def login_user():
             _id = response["id"]
             isAdmin = response["isAdmin"]
             token = encode_token(_id,username, isAdmin)
-            response.pop("password")
             return jsonify({
                 "status": 200, "data": [{
                 "token": token,

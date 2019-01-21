@@ -74,9 +74,9 @@ class TestUserRoutes(unittest.TestCase):
         response=self.test_client.post("/api/v1/auth/login" ,json=self.user_login)
         data = json.loads(response.data)
         # print(data)
-        self.assertEqual(response.status_code, 201)
-        self.assertEqual(data["status"], 201)
-        self.assertEqual(data["data"][0]["message"], "Logged in successfully")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(data["status"], 200)
+
 
     def test_incorrect_login_details(self):
         response = self.test_client.post("/api/v1/auth/register",json=self.user)
