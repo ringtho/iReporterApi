@@ -3,7 +3,7 @@ from api.models.redflag import RedFlag
 from api.models.user import (User, users, get_user)
 from api.validator import Validator
 from api.resources.auth import encode_token
-from api.db.db_connect import Database
+from api.models.user import User
 from api.resources.auth import required_token
 from api.resources.admin_auth import admin_required
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -13,7 +13,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 
 app = Flask(__name__)
-db_obj = Database()
+
 # db_obj.create_tables
 
 
@@ -90,17 +90,22 @@ def delete_redflag(red_flag_id):
 
 @app.route("/api/v1/auth/signup", methods=["POST"])
 def create_user():
-    validator = Validator(request)
     data = request.get_json()
-    if validator.validate_user_data():
-        db_obj.create_user(data['firstname'], data['lastname'], data['othernames'], 
-        data['username'], data['phoneNumber'], data['password'], data['email'])
+    try:
+        user_obj = User(request)
+        password = generate_password_hash(data['password'])
+        user_obj.create_user(data['firstname'], data['lastname'], data['othernames'], 
+        data['username'], data['phoneNumber'], password, data['email'],False)
+        del data["password"]
         return jsonify({"status": 201, "data":[{"user": {
             "id": users[-1]["id"],
-            "username": users[-1]["username"]
+            "username": users[-1]["username"],
+            "data": data
         },
            "message":"User successfully created"}]}),201
-    return jsonify({"status": 400, "Error": validator.error}),400
+    except Exception as e:
+
+        return jsonify({"status": 400, "Error": str(e)}),400
 
 @app.route("/api/v1/auth/login", methods=["POST"])
 def login_user():

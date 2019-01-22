@@ -1,6 +1,10 @@
 from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask import jsonify, abort
+from api.db.db_connect import Database
+from api.validator import Validator
+
+cursor = Database().cursor
 
 count = 1
 
@@ -22,36 +26,21 @@ users = [admin]
 
 class User:
 
-    def __init__(self, **kwargs):
-        global count
-        admin = 0
-        self.id = count
-        self.firstname = kwargs['firstname']
-        self.lastname = kwargs['lastname']
-        self.othernames = kwargs['othernames']
-        self.email = kwargs['email']
-        self.phoneNumber = kwargs['phoneNumber']
-        self.username = kwargs['username']
-        self.registered = datetime.today()
-        self.isAdmin = admin
-        self.password = kwargs['password']
-        count+=1
+    def __init__(self, request):
+        validator = Validator(request)
+        if validator.validate_user_data():
+            pass
+        else:
+            raise Exception(validator.error)
 
-
-    def json_format(self):
-        format = {
-            "id": self.id,
-            "firstname": self.firstname,
-            "lastname": self.lastname,
-            "othernames": self.othernames,
-            "email": self.email,
-            "phoneNumber": self.phoneNumber,
-            "username": self.username,
-            "registered": self.registered,
-            "isAdmin": self.isAdmin,
-            "password": self.password
-        }
-        return format
+    def create_user(self,firstname, lastname, othernames, username, phoneNumber, password, email, role):
+        global cursor
+        create_user= """
+        INSERT INTO users (firstname, lastname, othernames, username, phoneNumber, password, email,role) 
+        VALUES('{}','{}','{}','{}','{}','{}','{}','{}')""".format(firstname, 
+        lastname, othernames, username, phoneNumber, password, email,role)
+        return cursor.execute(create_user)
+    
 
 def get_user(username, password):
 
