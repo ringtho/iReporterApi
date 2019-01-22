@@ -3,12 +3,19 @@ from api.models.redflag import RedFlag
 from api.models.user import (User, users, get_user)
 from api.validator import Validator
 from api.resources.auth import encode_token
+from api.db.db_connect import Database
 from api.resources.auth import required_token
 from api.resources.admin_auth import admin_required
 from werkzeug.security import generate_password_hash, check_password_hash
 
 
+
+
+
 app = Flask(__name__)
+db_obj = Database()
+# db_obj.create_tables
+
 
 redflags = []
 validator = Validator(request)
@@ -86,11 +93,8 @@ def create_user():
     validator = Validator(request)
     data = request.get_json()
     if validator.validate_user_data():
-        user = User(firstname = data['firstname'], lastname = data['lastname'],
-        othernames = data['othernames'], email = data['email'], phoneNumber = data['phoneNumber'],
-        username = data['username'], password = generate_password_hash(data['password']))
-        new_user = user.json_format()
-        users.append(new_user)
+        db_obj.create_user(data['firstname'], data['lastname'], data['othernames'], 
+        data['username'], data['phoneNumber'], data['password'], data['email'])
         return jsonify({"status": 201, "data":[{"user": {
             "id": users[-1]["id"],
             "username": users[-1]["username"]
