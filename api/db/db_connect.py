@@ -1,6 +1,6 @@
 import psycopg2
 from os import environ
-from psycopg2.extras import RealDictCursor
+from psycopg2.extras import RealDictCursor, Json
 
 class Database:
 
@@ -28,7 +28,7 @@ class Database:
         registered TIMESTAMP DEFAULT NOW(),
         password varchar(255) NOT NULL, 
         email varchar(50) NOT NULL, 
-        role BOOLEAN NOT NULL 
+        isAdmin BOOLEAN NOT NULL 
 
         """,
         """
@@ -36,12 +36,13 @@ class Database:
         CREATE TABLE IF NOT EXISTS redflags(
         id serial PRIMARY KEY, 
         created_on TIMESTAMP DEFAULT NOW(), 
-        created_by varchar(50), 
+        created_by INTEGER REFERENCES users(id), 
         incident_type varchar(50), 
-        location varchar(50), 
-        status varchar(20), 
-        image varchar(255), 
-        comment varchar(100))
+        location varchar(255) NOT NULL, 
+        status varchar(20) NOT NULL, 
+        images varchar(255), 
+        videos varchar(255),
+        comment varchar(100) NOT NULL
         """,
 
         """

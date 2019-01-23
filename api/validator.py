@@ -19,20 +19,20 @@ class Validator:
 
     def ensure_no_empty_fields(self, redflag):
         # assert 'createdOn' in redflag, 'createdOn field not specified.'
-        assert 'createdBy' in redflag, 'createdBy field not specified.'
-        assert 'types' in redflag, 'types field not specified.'
+        # assert 'createdBy' in redflag, 'createdBy field not specified.'
+        assert 'incident_type' in redflag, 'incident type field not specified.'
         assert 'location' in redflag, 'location field not specified.'
         assert 'images' in redflag, 'images field not specified.'
         assert 'videos' in redflag, 'videos field not specified.'
         assert 'comment' in redflag, 'comment field not specified.'
 
     def ensure_valid_data_types(self, redflag):
-        assert isinstance(redflag['createdBy'], int), (
-        'createdBy should be an integer')
-        assert isinstance(redflag["location"], dict), (
-        "Location should be a dictionary containing latitude and longitude coordinates!")
-        assert isinstance(redflag["images"], list), ("Images must be of list type")
-        assert isinstance(redflag["videos"], list), ("Videos must be of list type")
+        # assert isinstance(redflag['createdBy'], int), (
+        # 'createdBy should be an integer')
+        assert isinstance(redflag["location"], str), (
+        "Location should be a string containing latitude and longitude coordinates!")
+        assert isinstance(redflag["images"], str), ("Images must be of string type")
+        assert isinstance(redflag["videos"], str), ("Videos must be of string type")
 
     def valid_location_for_edit(self):
         try:
@@ -44,8 +44,8 @@ class Validator:
             return False
 
     def ensure_valid_location_for_edit(self, redflag):
-        assert isinstance(redflag["location"], dict), (
-        "Location should be a dictionary containing latitude and longitude coordinates!")
+        assert isinstance(redflag["location"], str), (
+        "Location should be a string containing latitude and longitude coordinates!")
      
 
     def validate_user_data(self):
@@ -135,7 +135,6 @@ class Validator:
             raise Exception(f'{username} already exists')
         
         cursor.execute(query1)
-
         if cursor.fetchall():    
             raise Exception(f'{email} already in the system')
        

@@ -33,20 +33,28 @@ class User:
         else:
             raise Exception(validator.error)
 
-    def create_user(self,firstname, lastname, othernames, username, phoneNumber, password, email, role):
+    def create_user(self,firstname, lastname, othernames, username, phoneNumber, password, email, isAdmin):
         global cursor
         create_user= """
-        INSERT INTO users (firstname, lastname, othernames, username, phoneNumber, password, email,role) 
+        INSERT INTO users (firstname, lastname, othernames, username, phoneNumber, password, email,isAdmin) 
         VALUES('{}','{}','{}','{}','{}','{}','{}','{}')""".format(firstname, 
-        lastname, othernames, username, phoneNumber, password, email,role)
+        lastname, othernames, username, phoneNumber, password, email,isAdmin)
         return cursor.execute(create_user)
     
 
 def get_user(username, password):
+    query = f"SELECT username,password,id,isAdmin FROM users WHERE username='{username}'"
+    print(query)
+    cursor.execute(query)
+    user = cursor.fetchone()
+    if check_password_hash(user["password"], password):
+        return user
 
-    for user in users:
-        if user["username"] == username and check_password_hash(user["password"], password):
-            return user
+    # login = cursor.execute(query)
+    # if cursor.fetchone():
+    #     for record in cursor.fetchone():
+    #         if login[0] == username  and check_password_hash(login[1] , password):
+    #             return record
 
 
 
