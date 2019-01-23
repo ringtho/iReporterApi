@@ -8,7 +8,7 @@ class Database:
 
     def __init__(self):
         try:
-            if os.getenv("Testenv")=="EnvTests":
+            if os.getenv("STATE")=="Testing":
                 dbname = "ireportertest"
             else:
                 dbname = "ireporter"
