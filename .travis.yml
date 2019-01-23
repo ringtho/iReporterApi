@@ -6,6 +6,10 @@ python:
 services:
   - postgresql
 
+env:
+  global:
+    - "STATE"="Testing"
+
 before script:
   - psql -c "CREATE DATABASE ireportertest;" -U postgres
   - export DATABASE ireportertest
