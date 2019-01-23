@@ -3,6 +3,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask import jsonify, abort
 from api.db.db_connect import Database
 from api.validator import Validator
+import hashlib
 
 cursor = Database().cursor
 
@@ -43,11 +44,19 @@ class User:
         if check_password_hash(user["password"], password):
             return user
 
-    # login = cursor.execute(query)
-    # if cursor.fetchone():
-    #     for record in cursor.fetchone():
-    #         if login[0] == username  and check_password_hash(login[1] , password):
-    #             return record
+    # def create_admin(self):
+    #     """method for adding a user item in the users table"""
+    #     self.create_user(
+    #         "Smith",
+    #         "Ringtho",
+    #         "J",
+    #         "admin",
+    #         "+256778339655",
+    #         "admin@gmail.com",
+    #         "pbkdf2:sha256:50000$4RVd9ECa$57dc0f5212e7e5f9c5610a9af385c73fc54b35c27ed1f0bdad6f29ec5791282b",
+    #         True,
+
+    #     )
 
 
 
