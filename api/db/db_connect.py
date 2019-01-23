@@ -1,13 +1,19 @@
 import psycopg2
+import os
 from os import environ
+
 from psycopg2.extras import RealDictCursor, Json
 
 class Database:
 
     def __init__(self):
         try:
-            # self.conn = psycopg2.connect(environ.get("DATABASE"))
-            self.conn = psycopg2.connect("dbname='ireporter' user='postgres' host='localhost' password='.Adgjmp1' ")
+            # if os.getenv("Testenv")=="EnvTests":
+            #     dbname = "ireportertest"
+            # else:
+            # dbname = "ireporter"
+            self.conn = psycopg2.connect(environ.get("DATABASE_URL"))
+            # self.conn = psycopg2.connect(dbname=dbname,user="postgres",host='localhost',password='.Adgjmp1')
             self.cursor = self.conn.cursor(cursor_factory=RealDictCursor)
             self.conn.autocommit = True
             self.create_tables()
@@ -17,7 +23,6 @@ class Database:
 
     def create_tables(self):
         tables=("""
-        DROP TABLE IF EXISTS users;
         CREATE TABLE IF NOT EXISTS users
         (id serial PRIMARY KEY, 
         firstname varchar(100), 
@@ -32,7 +37,6 @@ class Database:
 
         """,
         """
-        DROP TABLE IF EXISTS redflags;
         CREATE TABLE IF NOT EXISTS redflags(
         id serial PRIMARY KEY, 
         created_on TIMESTAMP DEFAULT NOW(), 
@@ -46,7 +50,6 @@ class Database:
         """,
 
         """
-        DROP TABLE IF EXISTS interventions;
         CREATE TABLE IF NOT EXISTS interventions(
         id serial PRIMARY KEY, 
         created_on TIMESTAMP DEFAULT NOW(), 
@@ -59,6 +62,11 @@ class Database:
         """)
         for table in tables:
             self.cursor.execute(table)
+
+    def empty_tables(self):
+        self.cursor.execute("TRUNCATE TABLE users CASCADE")
+        self.cursor.execute("TRUNCATE TABLE redflags CASCADE")
+        self.cursor.execute("TRUNCATE TABLE interventions CASCADE")
 
 
 
