@@ -49,7 +49,7 @@ def create_redflag():
 @app.route("/api/v1/red-flags", methods=["GET"])
 @required_token
 def get_redflags():
-    if len(redflags) < 1:
+    if redflag_id.get_redflag_record() < 1:
         return jsonify({"status": 404, "message":"There are no red flags in the database"}), 404
     return jsonify({"status": 200, "data": redflags }), 200
 

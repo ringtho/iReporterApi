@@ -42,13 +42,13 @@ class User:
         return cursor.execute(create_user)
     
 
-def get_user(username, password):
-    query = f"SELECT username,password,id,isAdmin FROM users WHERE username='{username}'"
-    print(query)
-    cursor.execute(query)
-    user = cursor.fetchone()
-    if check_password_hash(user["password"], password):
-        return user
+    def get_user(self, username, password):
+        query = f"SELECT username,password,id,isAdmin FROM users WHERE username='{username}'"
+        print(query)
+        cursor.execute(query)
+        user = cursor.fetchone()
+        if check_password_hash(user["password"], password):
+            return user
 
     # login = cursor.execute(query)
     # if cursor.fetchone():
