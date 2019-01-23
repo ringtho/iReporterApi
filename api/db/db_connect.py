@@ -12,7 +12,7 @@ class Database:
             self.conn.autocommit = True
             self.create_tables()
             print("connected to database")
-        except (DatabaseError, psycopg2.Error) as e:
+        except (Exception, psycopg2.OperationalError) as e:
             print(e)
 
     def create_tables(self):

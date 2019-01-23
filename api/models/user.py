@@ -26,13 +26,6 @@ users = [admin]
 
 class User:
 
-    def __init__(self, request):
-        validator = Validator(request)
-        if validator.validate_user_data():
-            pass
-        else:
-            raise Exception(validator.error)
-
     def create_user(self,firstname, lastname, othernames, username, phoneNumber, password, email, isAdmin):
         global cursor
         create_user= """

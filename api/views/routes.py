@@ -1,9 +1,10 @@
 from flask import Flask, jsonify, request, json
 from api.models.redflag import RedFlag
-from api.models.user import (User, users, get_user)
+from api.models.user import (User, users)
 from api.validator import Validator
 from api.resources.auth import encode_token
 from api.resources.auth import decode_token
+from api.resources.auth import get_id_token
 from api.models.user import User
 from api.resources.auth import required_token
 from api.resources.admin_auth import admin_required
@@ -32,8 +33,7 @@ def hello():
 @required_token
 def create_redflag():
     validator = Validator(request)
-    token = request.headers.get("Authorization").split(" ")[1]
-    user_id = decode_token(token)["uid"]
+    user_id = get_id_token()
     if validator.redflag_is_valid():
         data = request.get_json()
         redflag_obj.create_redflag(data["incident_type"], data["location"],user_id,data["images"], 
@@ -49,9 +49,12 @@ def create_redflag():
 @app.route("/api/v1/red-flags", methods=["GET"])
 @required_token
 def get_redflags():
-    if redflag_id.get_redflag_record() < 1:
-        return jsonify({"status": 404, "message":"There are no red flags in the database"}), 404
-    return jsonify({"status": 200, "data": redflags }), 200
+    user_id = get_id_token()
+    redflags = redflag_obj.get_redflag_records(user_id)
+    if redflags:
+        return jsonify({"status": 200, "data": redflags }), 200
+    return jsonify({"status": 404, "message":"There are no red flags in the database"}), 404
+    
 
 @app.route("/api/v1/red-flags/<int:red_flag_id>", methods=["GET"])
 @required_token
@@ -97,8 +100,9 @@ def delete_redflag(red_flag_id):
 @app.route("/api/v1/auth/signup", methods=["POST"])
 def create_user():
     data = request.get_json()
-    try:
-        user_obj = User(request)
+    validator = Validator(request)
+    if validator.validate_user_data():
+        user_obj = User()
         password = generate_password_hash(data['password'])
         user_obj.create_user(data['firstname'], data['lastname'], data['othernames'], 
         data['username'], data['phoneNumber'], password, data['email'],False)
@@ -107,21 +111,20 @@ def create_user():
             "token": "token",
             "user": data
         },
-           "message":"User successfully created"}]}),201
-    except Exception as e:
-        return jsonify({"status": 400, "Error": str(e)}),400
+        "message":"User successfully created"}]}),201
+    return jsonify({"status": 400, "Error": validator.error}),400
+    
 
 @app.route("/api/v1/auth/login", methods=["POST"])
 def login_user():
     data = request.get_json()
-    if len(users) < 1:
-        return jsonify({"status": 400, "Error": "Non existent user"}),400
+    user = User()
     if not data:
         return jsonify({"Error": "Please provide some data!"}), 400
     if validator.validate_login_data():
         username = data["username"]
         password = data["password"]
-        response = get_user(username, password)
+        response = user.get_user(username, password)
         print(response)
         if response:
             _id = response["id"]
