@@ -8,17 +8,18 @@ services:
 
 env:
   global:
-    - "STATE"="Testing"
+    - STATE = "Testing"
 
 before script:
+  - psql -c "CREATE DATABASE ireporter;" -U postgres
   - psql -c "CREATE DATABASE ireportertest;" -U postgres
-  - export DATABASE ireportertest
+  # - export DATABASE ireportertest
 
 install:
   - pip install -r requirements.txt
 
 script:
-  - pytest --cov
+  - pytest --cov=api --cov-report term-missing
 
 after_success:
   - coveralls
