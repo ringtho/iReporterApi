@@ -17,8 +17,6 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 app = Flask(__name__)
 
-# db_obj.create_tables
-
 
 redflags = []
 redflag_obj = RedFlag()
@@ -41,7 +39,7 @@ def create_redflag():
         query = "SELECT id FROM redflags ORDER BY id DESC"
         cursor.execute(query)
         redflag_id = cursor.fetchone()["id"]
-        return jsonify({"status": 201, "data": [{ "redflag_id":redflag_id,
+        return jsonify({"status": 201, "data": [{ "id":redflag_id,
         "message": "red flag record created."}]}), 201
     else:
         return jsonify({"status": 400, "Error": validator.error}), 400
@@ -64,7 +62,7 @@ def get_single_redflag(red_flag_id):
     print(record)
     if record:
         return jsonify({"status": 200, "data": record}), 200
-    return jsonify({"status": 404, "Error": f"You are not authorized to access a redflag with id {red_flag_id}"}),404
+    return jsonify({"status": 404, "Error": f"The redflag with id {red_flag_id} doesnt exist"}),404
   
        
 @app.route("/api/v1/red-flags/<int:red_flag_id>/location", methods=['PATCH'])
