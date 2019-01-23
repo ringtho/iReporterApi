@@ -59,41 +59,50 @@ def get_redflags():
 @app.route("/api/v1/red-flags/<int:red_flag_id>", methods=["GET"])
 @required_token
 def get_single_redflag(red_flag_id):
-    single_redflag = []
-    if len(redflags) < 1:
-        return jsonify({"status": 404, "Error": "There are no redflags present in the database"}),404
-    for redflag in redflags:
-        if redflag["id"] == red_flag_id:
-            single_redflag.append(redflag)
-            return jsonify({"status": 200, "data": single_redflag}), 200
-    return jsonify({"status": 404, "Error": "A redflag with an id of {} doesnt exist".format(red_flag_id)}),404   
+    user_id = get_id_token()
+    record = redflag_obj.get_single_redflag(red_flag_id, user_id)
+    print(record)
+    if record:
+        return jsonify({"status": 200, "data": record}), 200
+    return jsonify({"status": 404, "Error": f"You are not authorized to access a redflag with id {red_flag_id}"}),404
+  
        
-@app.route("/api/v1/red-flags/<int:red_flag_id>/<string:query>", methods=['PATCH'])
+@app.route("/api/v1/red-flags/<int:red_flag_id>/location", methods=['PATCH'])
 @required_token
-def edit_location(red_flag_id, query):
+def edit_location(red_flag_id):
     if validator.valid_location_for_edit():
-        for redflag in redflags:
-            if redflag["id"] == red_flag_id:
-                data = request.get_json()
-                if (query == "location") or (query == "comment"):
-                    redflag[query] = data[query]
-                    return jsonify({"status":200, "data": [{"id": red_flag_id,
-                    "message": "Updated red-flag record's " + query }]})
-                return jsonify({"status": 404, "message": "The url you provided doesnt exist"
-                ", Try http://127.0.0.1:5000/api/v1/red-flags/1/query where query can be 'comment'"
-                " or 'location'"}),404
-        return jsonify({"status": 404, "Error": f"Non existent redflag. Id {red_flag_id} doesnt exist!"}),404
-    return jsonify({"status": 400, "Error": validator.error}), 400
+        user_id = get_id_token()
+        data = request.get_json()
+        location = data["location"]
+        record = redflag_obj.edit_location(red_flag_id,location,user_id)
+        if record:
+            return jsonify({"status":200, "data": [{"id": red_flag_id,
+            "message": "Updated red-flag record's location" }]})
+        return jsonify({"status": 404, "Error": f"The redflag with id {red_flag_id} doesnt exist"}),404
+    return jsonify({"status": 400, "Error":validator.error})    
+
+@app.route("/api/v1/red-flags/<int:red_flag_id>/comment", methods=['PATCH'])
+@required_token
+def edit_comment(red_flag_id):
+    user_id = get_id_token()
+    data = request.get_json()
+    comment = data["comment"]
+    record = redflag_obj.edit_comment(red_flag_id,comment,user_id)
+    if record:
+        return jsonify({"status":200, "data": [{"id": red_flag_id,
+        "message": "Updated red-flag record's comment" }]})
+    return jsonify({"status": 404, "Error": f"The redflag with id {red_flag_id} doesn't exist"}),404
+
 
 @app.route("/api/v1/red-flags/<int:red_flag_id>" ,methods=['DELETE'])
 @required_token
 def delete_redflag(red_flag_id):
-    for redflag in redflags:
-        if redflag['id'] == red_flag_id:
-            redflags.remove(redflag)
-            return jsonify({
+    user_id = get_id_token()
+    delete = redflag_obj.delete_redflag_record(red_flag_id,user_id)
+    if delete:
+        return jsonify({
             "status": 200,
-            "data":[{"id": redflag['id'],"message":"red-flag record has been deleted"}]
+            "data":[{"id": red_flag_id,"message":"red-flag record has been deleted"}]
             })
     return jsonify({"status": 404, "Error": f"The red flag record with id {red_flag_id} doesnt exist"}),404
 
