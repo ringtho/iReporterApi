@@ -70,5 +70,8 @@ class Database:
         self.cursor.execute("TRUNCATE TABLE redflags CASCADE")
         self.cursor.execute("TRUNCATE TABLE interventions CASCADE")
 
+if __name__ == '__main__':
+    db = Database()
+
 
 
