@@ -10,14 +10,14 @@ class RedFlag:
     """
     
     def create_redflag(self,incident_type,location, created_by, images, videos,comment, status):
-        cur = Database().cur
+        cursor = Database().get_cursor()
         create_redflag= """
         INSERT INTO redflags (incident_type, location, created_by, images, videos, comment, status) 
         VALUES('{}','{}','{}','{}','{}','{}','{}')""".format(incident_type,location, created_by, images, videos,comment, status)
-        return cur.execute(create_redflag)
+        return cursor.execute(create_redflag)
     
     def get_redflag_records(self,user_id):
-        cursor = Database().cursor
+        cursor = Database().get_cursor()
         get_redflags = f"SELECT * FROM redflags WHERE created_by={user_id}"
         cursor.execute(get_redflags)
         redflags = cursor.fetchall()
@@ -25,14 +25,14 @@ class RedFlag:
         return redflags
     
     def get_single_redflag(self,redflag_id, user_id):
-        cursor = Database().cursor
+        cursor = Database().get_cursor()
         get_redflag = f"SELECT * FROM redflags WHERE id={redflag_id} AND created_by={user_id}"
         cursor.execute(get_redflag)
         redflag = cursor.fetchone()
         return redflag
     
     def edit_location(self, redflag_id,location,user_id):
-        cursor = Database().cursor
+        cursor = Database().get_cursor()
         query = f"UPDATE redflags SET location='{location}' WHERE id={redflag_id} AND created_by={user_id}"
         cursor.execute(query)
         rows = cursor.rowcount
@@ -40,21 +40,21 @@ class RedFlag:
        
 
     def edit_comment(self, redflag_id,comment,user_id):
-        cursor = Database().cursor
+        cursor = Database().get_cursor()
         query = f"UPDATE redflags SET comment='{comment}' WHERE id={redflag_id} AND created_by={user_id}"
         cursor.execute(query)
         rows = cursor.rowcount
         return rows
     
     def delete_redflag_record(self,redflag_id,user_id):
-        cur = Database().cursor
+        cursor = Database().get_cursor()
         query = f"DELETE FROM redflags WHERE id={redflag_id} AND created_by={user_id}"
-        cur.execute(query)
-        rows = cur.rowcount
+        cursor.execute(query)
+        rows = cursor.rowcount
         return rows
 
     def edit_status_admin(self, redflag_id,status):
-        cursor = Database().cursor
+        cursor = Database().get_cursor()
         query = f"UPDATE redflags SET status='{status}' WHERE id={redflag_id}"
         cursor.execute(query)
         rows = cursor.rowcount

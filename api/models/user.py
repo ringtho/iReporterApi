@@ -5,23 +5,23 @@ from api.db.db_connect import Database
 from api.validator import Validator
 import hashlib
 
-cursor = Database().cursor
+# cursor = Database().get_cursor()
 
 count = 1
 
 class User:
 
     def create_user(self,firstname, lastname, othernames, username, phoneNumber, password, email, isAdmin):
-        # cursor = Database().cursor
-        cur = Database().cur
+        cursor = Database().get_cursor()
         create_user= """
         INSERT INTO users (firstname, lastname, othernames, username, phoneNumber, password, email,isAdmin) 
         VALUES('{}','{}','{}','{}','{}','{}','{}','{}')""".format(firstname, 
         lastname, othernames, username, phoneNumber, password, email,isAdmin)
-        return cur.execute(create_user)
+        return cursor.execute(create_user)
     
 
     def get_user(self, username, password):
+        cursor = Database().get_cursor()
         query = f"SELECT username,password,id,isAdmin FROM users WHERE username='{username}'"
         print(query)
         cursor.execute(query)
@@ -30,16 +30,17 @@ class User:
             return user
 
     def get_all_users(self):
+        cursor = Database().get_cursor()
         query = f"SELECT * FROM users"
         cursor.execute(query)
         users = cursor.fetchall()
         return users
 
     def delete_particular_user(self, user_id):
-        cur = Database().cur
+        cursor = Database().get_cursor()
         query = f"DELETE FROM users WHERE id={user_id}"
-        cur.execute(query)
-        rows = cur.rowcount
+        cursor.execute(query)
+        rows = cursor.rowcount
         return rows
 
 

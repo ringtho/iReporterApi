@@ -139,6 +139,12 @@ class TestRedFlags(unittest.TestCase):
         self.assertEqual(data["data"][0]["message"], "red-flag record has been deleted")
         self.assertEqual(data["status"], 200)
 
+    # def test_update_status(self):
+    #     getter = GetTokenTests()
+    #     token = getter.get_user_post()
+    #     headers={"Authorization":"Bearer " + token}
+
+
        
     def test_delete_nonexistent_object(self):
         response = self.test_client.delete("/api/v1/red-flags/2",
