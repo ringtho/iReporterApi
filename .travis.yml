@@ -8,13 +8,13 @@ services:
 
 env:
   global:
-  - STATE='Testing'
+    - STATE='Testing'
 
 install:
   - pip install -r requirements.txt
 
 before script:
-  - "psql -c 'CREATE DATABASE ireportertest;' -U postgres"
+  - "psql -c 'create database ireportertest;' -U postgres"
 
 script:
   - pytest --cov=api --cov-report term-missing
