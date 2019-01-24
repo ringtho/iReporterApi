@@ -217,7 +217,20 @@ def edit_intervention_location(intervention_id):
             return jsonify({"status":200, "data": [{"id": intervention_id,
             "message": "Updated intervention record's location" }]})
         return jsonify({"status": 404, "Error": f"The intervention with id {intervention_id} doesnt exist"}),404
-    return jsonify({"status": 400, "Error":validator.error})    
+    return jsonify({"status": 400, "Error":validator.error}) 
+
+@app.route("/api/v1/red-flags/<int:intervention_id>/comment", methods=['PATCH'])
+@required_token
+def edit_intervention_comment(intervention_id):
+    user_id = get_id_token()
+    data = request.get_json()
+    comment = data["comment"]
+    record = intervention_obj.edit_comment(intervention_id,comment,user_id)
+    if record:
+        return jsonify({"status":200, "data": [{"id": intervention_id,
+        "message": "Updated intervention record's comment" }]})
+    return jsonify({"status": 404, "Error": f"The intervention with id {intervention_id} doesn't exist"}),404
+
 
 @app.errorhandler(404)
 def page_doesnt_exist(e):
