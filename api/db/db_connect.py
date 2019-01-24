@@ -2,13 +2,14 @@ import psycopg2
 import os
 from os import environ
 from psycopg2.extras import RealDictCursor
+from instance.config import app_config
 
 
 class Database:
 
     def __init__(self):
         try:
-            if os.getenv("STATE")=="Testing":
+            if app_config == 'testing':
                 dbname = "ireportertest"
             else:
                 dbname = "ireporter"
