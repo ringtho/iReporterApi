@@ -8,10 +8,9 @@ services:
 
 env:
   global:
-    - STATE = "Testing"
-
+    - APP_SETTING =Testing
+virtualenv:
 before script:
-  - psql -c "CREATE DATABASE ireporter;" -U postgres
   - psql -c "CREATE DATABASE ireportertest;" -U postgres
   # - export DATABASE ireportertest
 
