@@ -14,3 +14,11 @@ class Intervention:
         INSERT INTO interventions (incident_type, location, created_by, images, videos, comment, status) 
         VALUES('{}','{}','{}','{}','{}','{}','{}')""".format(incident_type,location, created_by, images, videos,comment, status)
         return cursor.execute(create_intervention)
+
+    def get_intervention_records(self,user_id):
+        cursor = Database().cursor
+        get_redflags = f"SELECT * FROM interventions WHERE created_by={user_id}"
+        cursor.execute(get_redflags)
+        interventions = cursor.fetchall()
+        print(interventions)
+        return interventions
