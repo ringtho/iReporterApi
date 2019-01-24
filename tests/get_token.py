@@ -1,4 +1,4 @@
-from api.routes import app
+from api.views.routes import app
 from flask import json
 
 class GetTokenTests:

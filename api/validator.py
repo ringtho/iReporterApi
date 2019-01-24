@@ -1,5 +1,7 @@
-from api.user import users
 import re
+from api.db.db_connect import Database
+
+cursor = Database().cursor
 
 class Validator:
     def __init__(self, request):
@@ -17,20 +19,20 @@ class Validator:
 
     def ensure_no_empty_fields(self, redflag):
         # assert 'createdOn' in redflag, 'createdOn field not specified.'
-        assert 'createdBy' in redflag, 'createdBy field not specified.'
-        assert 'types' in redflag, 'types field not specified.'
+        # assert 'createdBy' in redflag, 'createdBy field not specified.'
+        assert 'incident_type' in redflag, 'incident type field not specified.'
         assert 'location' in redflag, 'location field not specified.'
         assert 'images' in redflag, 'images field not specified.'
         assert 'videos' in redflag, 'videos field not specified.'
         assert 'comment' in redflag, 'comment field not specified.'
 
     def ensure_valid_data_types(self, redflag):
-        assert isinstance(redflag['createdBy'], int), (
-        'createdBy should be an integer')
-        assert isinstance(redflag["location"], dict), (
-        "Location should be a dictionary containing latitude and longitude coordinates!")
-        assert isinstance(redflag["images"], list), ("Images must be of list type")
-        assert isinstance(redflag["videos"], list), ("Videos must be of list type")
+        # assert isinstance(redflag['createdBy'], int), (
+        # 'createdBy should be an integer')
+        assert isinstance(redflag["location"], str), (
+        "Location should be a string containing latitude and longitude coordinates!")
+        assert isinstance(redflag["images"], str), ("Images must be of string type")
+        assert isinstance(redflag["videos"], str), ("Videos must be of string type")
 
     def valid_location_for_edit(self):
         try:
@@ -42,8 +44,8 @@ class Validator:
             return False
 
     def ensure_valid_location_for_edit(self, redflag):
-        assert isinstance(redflag["location"], dict), (
-        "Location should be a dictionary containing latitude and longitude coordinates!")
+        assert isinstance(redflag["location"], str), (
+        "Location should be a string containing latitude and longitude coordinates!")
      
 
     def validate_user_data(self):
@@ -101,13 +103,17 @@ class Validator:
 
     def validate_password(self, password):
         assert isinstance(password, str), 'Password must be a string!'
-        checks = {'a-z': str.islower, 'A-Z': str.isupper, '0-9': str.isdigit}
-        for character in password:
-            for key, check in checks.items():
-                if check(character):
-                    del checks[key]
-                    break # move onto the next character
-        password_is_valid = len(checks) == 0 and 8 <= len(password) <= 12
+        check_password = {
+        'a-z': str.islower, 
+        'A-Z': str.isupper, 
+        '0-9': str.isdigit
+        }
+        for letter in password:
+            for key, value in check_password.items():
+                if value(letter):
+                    del check_password[key]
+                    break 
+        password_is_valid = len(check_password) == 0 and 8 <= len(password) <= 12
         error_message = (
             'Password must contain atleast one lowercase letter, one uppercase letter,'
             ' a digit and be 8 to 12 characters long!'
@@ -120,11 +126,17 @@ class Validator:
         assert telephone_pattern.match(phone.strip()), 'Telephone contact is invalid!'
     
     def check_if_user_exists_already(self, username, email):
-        for user in users:
-            if user['username'] == username:
-                raise Exception(f'{username} already exists')
-            if user["email"] == email:
-                raise Exception(f'{email} already in the system')
+        global cursor
+        query = """SELECT username FROM users WHERE username='{}'""".format(username)
+        query1 = """SELECT email FROM users WHERE email='{}'""".format(email)
+        cursor.execute(query)
+
+        if cursor.fetchall():
+            raise Exception(f'{username} already exists')
+        
+        cursor.execute(query1)
+        if cursor.fetchall():    
+            raise Exception(f'{email} already in the system')
        
 
 
