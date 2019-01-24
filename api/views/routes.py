@@ -1,5 +1,6 @@
 from flask import Flask, jsonify, request, json
 from api.models.redflag import RedFlag
+from api.models.interventions import Intervention
 from api.models.user import (User, users)
 from api.validator import Validator
 from api.resources.auth import encode_token
@@ -20,6 +21,7 @@ app = Flask(__name__)
 
 redflags = []
 redflag_obj = RedFlag()
+intervention_obj = Intervention()
 validator = Validator(request)
 cursor = Database().cursor
 
@@ -165,8 +167,25 @@ def delete_user(user_id):
             })
     return jsonify({"status": 404, "Error": f"The user with id {user_id} doesnt exist"}),404  
 
+@app.route("/api/v1/interventions" ,methods=["POST"])
+@required_token
+def create_intervention():
+    validator = Validator(request)
+    user_id = get_id_token()
+    print(user_id)
+    cursor = Database().cursor
+    if validator.redflag_is_valid():
+        data = request.get_json()
+        intervention_obj.create_intervention(data["incident_type"], data["location"],user_id,data["images"], 
+        data["videos"],data["comment"], "DRAFT")
+        query = "SELECT id FROM interventions ORDER BY id DESC"
+        cursor.execute(query)
+        intervention_id = cursor.fetchone()["id"]
+        return jsonify({"status": 201, "data": [{ "id":intervention_id,
+        "message": "red flag record created."}]}), 201
+    else:
+        return jsonify({"status": 400, "Error": validator.error}), 400
 
-     
 
 @app.errorhandler(404)
 def page_doesnt_exist(e):

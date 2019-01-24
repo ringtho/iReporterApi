@@ -7,5 +7,4 @@ db = Database()
 
 if __name__ == '__main__':
     # user_obj.create_admin()
-    db.empty_tables()
     app.run(debug=True)
