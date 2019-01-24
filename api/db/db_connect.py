@@ -9,7 +9,7 @@ class Database:
     def __init__(self):
         try:
             if os.getenv("STATE")=="Testing":
-                self.conn = psycopg2.connect(dbname='ireportertest',user="postgres",host='localhost',password=".Adgjmp1", port=5432)
+                self.conn = psycopg2.connect(dbname='ireportertest',user="postgres",host='localhost', port=5432)
                 self.cursor = self.conn.cursor(cursor_factory=RealDictCursor)
                 self.conn.autocommit = True
                 self.create_users_table()
