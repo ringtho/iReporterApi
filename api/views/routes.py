@@ -195,6 +195,16 @@ def get_interventions():
         return jsonify({"status": 200, "data": interventions }), 200
     return jsonify({"status": 404, "message":"There are no red flags in the database"}), 404
 
+@app.route("/api/v1/interventions/<int:intervention_id>", methods=["GET"])
+@required_token
+def get_single_intervention(intervention_id):
+    user_id = get_id_token()
+    record = intervention_obj.get_single_intervention(intervention_id, user_id)
+    print(record)
+    if record:
+        return jsonify({"status": 200, "data": record}), 200
+    return jsonify({"status": 404, "Error": f"The intervention with id {intervention_id} doesnt exist"}),404
+
 
 @app.errorhandler(404)
 def page_doesnt_exist(e):
