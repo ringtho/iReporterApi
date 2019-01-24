@@ -11,8 +11,7 @@ env:
     - STATE = "Testing"
 
 before script:
-  - psql -c "CREATE DATABASE ireporter;" -U postgres
-  - psql -c "CREATE DATABASE ireportertest;" -U postgres
+  - "psql -c 'CREATE DATABASE ireportertest;' -U postgres"
   # - export DATABASE ireportertest
 
 install:
