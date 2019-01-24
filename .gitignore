@@ -5,3 +5,8 @@ tests/__pycache__/
 venv/
 .coverage
 api/__init__.pyc
+.env
+api/__init__.py 
+api/db/__init__.py  
+api/resources/__init__.py
+*__init__.py
