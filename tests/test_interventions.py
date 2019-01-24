@@ -151,7 +151,23 @@ class TestInterventions(unittest.TestCase):
         self.assertEqual(data["status"], 404)
         self.assertIn("The intervention with id 7000 doesnt exist", data["Error"])
 
-   
+    def test_update_status(self):
+        getter = GetTokenTests()
+        token = getter.get_user_post()
+        headers={"Authorization":"Bearer " + token}
+        response = self.test_client.post("/api/v1/interventions",
+        headers=headers, json=self.intervention)
+        self.assertEqual(response.status_code, 201)
+        token2 = getter.get_admin_token()
+        headers={"Authorization":"Bearer " + token2}
+        status = {"status":"Resolved"}
+        res = self.test_client.patch("/api/v1/interventions/{}/status".format(response.json["data"][0]["id"]), headers=headers, json=status)
+        data = json.loads(res.data)
+        print(data)
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(data["data"][0]["message"], "Updated intervention record's status to Resolved")
+
+
     def test_error_get_nonexistent_redflag(self):
         response = self.test_client.post("/api/v1/interventions",
         headers=dict(Authorization='Bearer '+ GetTokenTests.get_user_post(self)), json=self.intervention)
