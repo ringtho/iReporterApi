@@ -33,13 +33,19 @@ def decode_token(token):
     decode = jwt.decode(token, secret_key, algorithms='HS256')
     return decode
 
+def get_id_token():
+    token = ensure_token_available_and_clean()
+    decoded = decode_token(token)
+    user_id = decoded["uid"]
+    return user_id
+
 def required_token(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
         response = None
         try:
             token = ensure_token_available_and_clean()
-            decode_token(token)
+            token = decode_token(token)
             response = func(*args, **kwargs)
         except jwt.ExpiredSignatureError:
             response = jsonify({
