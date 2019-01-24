@@ -14,10 +14,10 @@ class Database:
                 self.conn.autocommit = True
                 self.create_users_table()
                 self.create_redflags_table()
-                self.create_interventions_table()
+                self.create_interventions_table() # post
             else:
                 # self.conn = psycopg2.connect(environ.get("DATABASE_URL"))
-                self.conn = psycopg2.connect(dbname='ireporter',user="postgres",host='localhost',password='.Adgjmp1',port=5432)
+                self.conn = psycopg2.connect(os.getenv('DATABASE_URL'))
                 self.cursor = self.conn.cursor(cursor_factory=RealDictCursor)
                 self.conn.autocommit = True
                 self.create_users_table()
