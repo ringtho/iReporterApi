@@ -9,7 +9,7 @@ class Database:
     def __init__(self):
         try:
             if os.getenv("STATE")=="Testing":
-                self.conn = psycopg2.connect(dbname='ireportertest',user="postgres",host='localhost',password="", port=5432)
+                self.conn = psycopg2.connect(dbname='ireportertest',user="postgres",host='localhost',password=".Adgjmp1", port=5432)
                 self.cursor = self.conn.cursor(cursor_factory=RealDictCursor)
                 self.conn.autocommit = True
                 self.create_users_table()
@@ -17,7 +17,7 @@ class Database:
                 self.create_interventions_table() # post
             else:
                 # self.conn = psycopg2.connect(environ.get("DATABASE_URL"))
-                self.conn = psycopg2.connect(os.getenv('DATABASE_URL'))
+                self.conn = psycopg2.connect(dbname='ireporter',user="postgres",host='localhost',password='.Adgjmp1',port=5432)
                 self.cursor = self.conn.cursor(cursor_factory=RealDictCursor)
                 self.conn.autocommit = True
                 self.create_users_table()
