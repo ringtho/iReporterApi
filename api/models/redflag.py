@@ -51,12 +51,12 @@ class RedFlag:
         rows = cursor.rowcount
         return rows
 
-    # def edit_status_admin(self, redflag_id,status):
-    #     cursor = Database().cursor
-    #     query = f"UPDATE redflags SET status='{status}' WHERE id={redflag_id}"
-    #     cursor.execute(query)
-    #     rows = cursor.rowcount
-    #     return rows
+    def edit_status_admin(self, redflag_id,status):
+        cursor = Database().cursor
+        query = f"UPDATE redflags SET status='{status}' WHERE id={redflag_id}"
+        cursor.execute(query)
+        rows = cursor.rowcount
+        return rows
 
 
         
