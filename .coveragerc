@@ -10,3 +10,7 @@ omit =
     */models.py
     */venv/*
     */models.py
+    */api/__init__.py
+    */api/db/__init__.py
+    */api/models/__init__.py
+    */api/views/__init__.py
