@@ -16,7 +16,9 @@ class Database:
             self.conn = psycopg2.connect(dbname=dbname,user="postgres",host='localhost',password='.Adgjmp1')
             self.cursor = self.conn.cursor(cursor_factory=RealDictCursor)
             self.conn.autocommit = True
-            print("connected to database")
+            self.create_tables()
+          
+            # print("connected to database")
         except (Exception, psycopg2.OperationalError) as e:
             print(e)
 
@@ -55,12 +57,13 @@ class Database:
         CREATE TABLE IF NOT EXISTS interventions(
         id serial PRIMARY KEY, 
         created_on TIMESTAMP DEFAULT NOW(), 
-        created_by varchar(50), 
+        created_by INTEGER REFERENCES users(id), 
         incident_type varchar(50), 
-        location varchar(50), 
-        status varchar(20), 
-        image varchar(255), 
-        comment varchar(100)    
+        location varchar(255) NOT NULL, 
+        status varchar(20) NOT NULL, 
+        images varchar(255), 
+        videos varchar(255),
+        comment varchar(100) NOT NULL   
         """)
         for table in tables:
             self.cursor.execute(table)
