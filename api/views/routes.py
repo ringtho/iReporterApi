@@ -154,20 +154,25 @@ def login_user():
 @app.route("/api/v1/auth/users",methods=["GET"])
 @admin_required
 def get_user_info():
-    if len(users) < 1:
-        return jsonify({"status": 404, "Error": "There are no users in the database"}),404
-    return jsonify({"status": 200,"data": users}), 200
+    user = User()
+    users = user.get_all_users()
+    if users:
+        return jsonify({"status": 200,"data": users}), 200
+    return jsonify({"status": 404, "Error": "There are no users in the database"}),404
 
 @app.route("/api/v1/auth/users/<int:user_id>", methods=["DELETE"])
 @admin_required
 def delete_user(user_id):
-    for user in users:
-        if user['id'] == user_id:
-            users.remove(user)
-            return jsonify({
-            "status": 200,
-            "data":[{"id": user['id'],"message":"{} has been deleted from the system".format(user["username"])}]
-            })
+    # for user in users:
+    #     if user['id'] == user_id:
+    #         users.remove(user)
+    user_obj = User()
+    delete = user_obj.delete_particular_user(user_id)
+    if delete > 0:
+        return jsonify({
+        "status": 200,
+        "data":[{"id": user_id,"message":"User with id {} has been deleted from the system".format(user_id)}]
+        })
     return jsonify({"status": 404, "Error": f"The user with id {user_id} doesnt exist"}),404 
 
 @app.route("/api/v1/auth/admin", methods=["POST"])

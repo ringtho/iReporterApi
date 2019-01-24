@@ -44,5 +44,17 @@ class User:
         if check_password_hash(user["password"], password):
             return user
 
+    def get_all_users(self):
+        query = f"SELECT * FROM users"
+        cursor.execute(query)
+        users = cursor.fetchall()
+        return users
+
+    def delete_particular_user(self, user_id):
+        query = f"DELETE FROM users WHERE id={user_id}"
+        cursor.execute(query)
+        rows = cursor.rowcount
+        return rows
+
 
         

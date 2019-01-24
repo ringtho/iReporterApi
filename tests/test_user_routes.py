@@ -156,18 +156,35 @@ class TestUserRoutes(unittest.TestCase):
         self.assertIn(data["Error"], "mark@gmail.com already in the system")
         self.assertEqual(data["status"], 400)
     
-    # def test_get_users(self):
+    def test_get_users(self):
+        response = self.test_client.post("/api/v1/auth/signup",  json=self.user)
+        response = self.test_client.post("/api/v1/auth/signup", json=self.user2)
+        print(response.json)
+        self.assertEqual(response.status_code, 201)
+        getter = GetTokenTests()
+        token = getter.get_admin_token()
+        headers={"Authorization":"Bearer " + token}
+        res = self.test_client.get("/api/v1/auth/users", headers=headers)
+        data = json.loads(res.data)
+        print(data)
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(data["status"], 200)
+        self.assertEqual(data["data"][1]["firstname"], "Mark")
+
+    # def test_delete_user(self):
+    #     response = self.test_client.post("/api/v1/auth/signup",  json=self.user)
+    #     self.assertEqual(response.status_code, 201)
+    #     print(response.data)
     #     getter = GetTokenTests()
     #     token = getter.get_admin_token()
     #     headers={"Authorization":"Bearer " + token}
-    #     response = self.test_client.post("/api/v1/auth/signup", json=self.user)
-    #     response = self.test_client.post("/api/v1/auth/signup", json=self.user2)
-    #     self.assertEqual(response.status_code, 201)
-    #     res = self.test_client.get("/api/v1/auth/users", headers=headers)
+    #     res = self.test_client.get("/api/v1/auth/users{}".format(response.json["data"][0]["id"]), headers=headers)
     #     data = json.loads(res.data)
-    #     self.assertEqual(res.status_code, 200)
+    #     print(data)
+    #     self.assertEqual(res.status, 200)
     #     self.assertEqual(data["status"], 200)
-    #     self.assertEqual(data["data"][1]["firstname"], "smith")
+        
+
 
  
 if __name__ == '__main__':
