@@ -243,6 +243,18 @@ def edit_intervention_status(intervention_id):
         f"message": "Updated intervention record's status to '{status}'" }]})
     return jsonify({"status": 404, "Error": f"An intervention with id {intervention_id} doesn't exist"}),404
 
+@app.route("/api/v1/redflags/<int:redflag_id>/status", methods=['PATCH'])
+@admin_required
+def edit_redflag_status(redflag_id):
+    # user_id = get_id_token()
+    data = request.get_json()
+    status = data["status"]
+    record = redflag_obj.edit_status_admin(redflag_id,status)
+    if record:
+        return jsonify({"status":200, "data": [{"id": redflag_id,
+        f"message": "Updated intervention record's status to '{status}'" }]})
+    return jsonify({"status": 404, "Error": f"An intervention with id {redflag_id} doesn't exist"}),404
+
 
 @app.route("/api/v1/interventions/<int:intervention_id>" ,methods=['DELETE'])
 @required_token
