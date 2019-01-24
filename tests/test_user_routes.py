@@ -1,10 +1,11 @@
 import unittest
-from api.views.routes import app
+from api.views.routes import create_app
 from tests.get_token import GetTokenTests
 import json
 from api.db.db_connect import Database
 from api.models.user import User
 from api.views import routes
+
 
 # cursor = Database().cursor
 
@@ -12,7 +13,8 @@ from api.views import routes
 class TestUserRoutes(unittest.TestCase):
     def setUp(self):
         """initialise test client"""
-        self.test_client = app.test_client()
+        self.app = create_app("testing")
+        self.test_client = self.app.test_client()
         self.db = Database()
         # self.db.create_tables()
 

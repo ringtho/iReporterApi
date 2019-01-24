@@ -1,11 +1,12 @@
 import unittest
-from api.views.routes import app
+from api.views.routes import create_app
 from tests.get_token import GetTokenTests
 from api.models.redflag import RedFlag
 from api.db.db_connect import Database
 import json
 from api.views import routes
 
+app = create_app("testing")
 
 class TestRedFlags(unittest.TestCase):
     def setUp(self):

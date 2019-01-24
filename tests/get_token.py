@@ -1,7 +1,10 @@
-from api.views.routes import app
+from api.views.routes import create_app
 from flask import json
 
+app = create_app("testing")
+
 class GetTokenTests:
+    
 
     def get_user_post(self):
         register_info = {
@@ -16,7 +19,7 @@ class GetTokenTests:
 
         }
     
-        response = app.test_client().post('/api/v1/auth/signup', json=register_info)
+        response = create_app("testing").test_client().post('/api/v1/auth/signup', json=register_info)
 
         admin={
             

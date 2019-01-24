@@ -1,5 +1,5 @@
 import unittest
-from api.views.routes import app
+from api.views.routes import create_app
 from tests.get_token import GetTokenTests
 from api.models.redflag import RedFlag
 from api.db.db_connect import Database
@@ -10,7 +10,7 @@ from api.views import routes
 class TestInterventions(unittest.TestCase):
     def setUp(self):
         """initialise test client"""
-        self.test_client = app.test_client()
+        self.test_client = create_app("testing").test_client()
         self.db = Database()
 
         self.intervention = {
