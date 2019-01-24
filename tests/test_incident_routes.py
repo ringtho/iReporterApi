@@ -12,6 +12,10 @@ class TestRedFlags(unittest.TestCase):
         """initialise test client"""
         self.test_client = app.test_client()
         self.db = Database()
+        # self.db.create_users_table()
+        # self.db.create_redflags_table()
+        # self.db.create_interventions_table()
+        
 
         self.incident = {
        
