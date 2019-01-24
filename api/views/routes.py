@@ -186,6 +186,15 @@ def create_intervention():
     else:
         return jsonify({"status": 400, "Error": validator.error}), 400
 
+@app.route("/api/v1/interventions", methods=["GET"])
+@required_token
+def get_interventions():
+    user_id = get_id_token()
+    interventions = intervention_obj.get_intervention_records(user_id)
+    if interventions:
+        return jsonify({"status": 200, "data": interventions }), 200
+    return jsonify({"status": 404, "message":"There are no red flags in the database"}), 404
+
 
 @app.errorhandler(404)
 def page_doesnt_exist(e):
