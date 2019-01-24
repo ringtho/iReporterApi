@@ -4,6 +4,7 @@ from tests.get_token import GetTokenTests
 from api.models.redflag import RedFlag
 from api.db.db_connect import Database
 import json
+import os
 from api.views import routes
 
 
@@ -12,6 +13,7 @@ class TestRedFlags(unittest.TestCase):
         """initialise test client"""
         self.test_client = app.test_client()
         self.db = Database()
+        os.environ["STATE"] = "Testing"
         # self.db.create_users_table()
         # self.db.create_redflags_table()
         # self.db.create_interventions_table()

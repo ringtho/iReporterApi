@@ -5,6 +5,7 @@ import json
 from api.db.db_connect import Database
 from api.models.user import User
 from api.views import routes
+import os
 
 # cursor = Database().cursor
 
@@ -14,6 +15,7 @@ class TestUserRoutes(unittest.TestCase):
         """initialise test client"""
         self.test_client = app.test_client()
         self.db = Database()
+        os.environ["STATE"] = "Testing"
         # self.db.create_tables()
 
         self.user = {
