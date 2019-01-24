@@ -75,7 +75,7 @@ def edit_location(red_flag_id):
         data = request.get_json()
         location = data["location"]
         record = redflag_obj.edit_location(red_flag_id,location,user_id)
-        if record:
+        if record > 0:
             return jsonify({"status":200, "data": [{"id": red_flag_id,
             "message": "Updated red-flag record's location" }]})
         return jsonify({"status": 404, "Error": f"The redflag with id {red_flag_id} doesnt exist"}),404
@@ -88,7 +88,7 @@ def edit_comment(red_flag_id):
     data = request.get_json()
     comment = data["comment"]
     record = redflag_obj.edit_comment(red_flag_id,comment,user_id)
-    if record:
+    if record > 0:
         return jsonify({"status":200, "data": [{"id": red_flag_id,
         "message": "Updated red-flag record's comment" }]})
     return jsonify({"status": 404, "Error": f"The redflag with id {red_flag_id} doesn't exist"}),404
@@ -142,7 +142,10 @@ def login_user():
             return jsonify({
                 "status": 200, "data": [{
                 "token": token,
-                "user": response
+                "user": {
+                    "id": response["id"],
+                    "username": response["username"]
+                }
                 }]
             }), 200
         return jsonify({ "status": 400, "Error": "Invalid Username or Password"}), 400 
@@ -199,7 +202,7 @@ def create_intervention():
         cursor.execute(query)
         intervention_id = cursor.fetchone()["id"]
         return jsonify({"status": 201, "data": [{ "id":intervention_id,
-        "message": "red flag record created."}]}), 201
+        "message": "intervention record created."}]}), 201
     else:
         return jsonify({"status": 400, "Error": validator.error}), 400
 
@@ -222,7 +225,7 @@ def get_single_intervention(intervention_id):
         return jsonify({"status": 200, "data": record}), 200
     return jsonify({"status": 404, "Error": f"The intervention with id {intervention_id} doesnt exist"}),404
 
-@app.route("/api/v1/red-flags/<int:red_flag_id>/location", methods=['PATCH'])
+@app.route("/api/v1/interventions/<int:intervention_id>/location", methods=['PATCH'])
 @required_token
 def edit_intervention_location(intervention_id):
     if validator.valid_location_for_edit():
@@ -230,20 +233,20 @@ def edit_intervention_location(intervention_id):
         data = request.get_json()
         location = data["location"]
         record = intervention_obj.edit_location(intervention_id,location,user_id)
-        if record:
+        if record > 0:
             return jsonify({"status":200, "data": [{"id": intervention_id,
             "message": "Updated intervention record's location" }]})
         return jsonify({"status": 404, "Error": f"The intervention with id {intervention_id} doesnt exist"}),404
     return jsonify({"status": 400, "Error":validator.error}) 
 
-@app.route("/api/v1/red-flags/<int:intervention_id>/comment", methods=['PATCH'])
+@app.route("/api/v1/interventions/<int:intervention_id>/comment", methods=['PATCH'])
 @required_token
 def edit_intervention_comment(intervention_id):
     user_id = get_id_token()
     data = request.get_json()
     comment = data["comment"]
     record = intervention_obj.edit_comment(intervention_id,comment,user_id)
-    if record:
+    if record > 0:
         return jsonify({"status":200, "data": [{"id": intervention_id,
         "message": "Updated intervention record's comment" }]})
     return jsonify({"status": 404, "Error": f"The intervention with id {intervention_id} doesn't exist"}),404
@@ -257,7 +260,7 @@ def edit_intervention_status(intervention_id):
     record = intervention_obj.edit_status_admin(intervention_id,status)
     if record:
         return jsonify({"status":200, "data": [{"id": intervention_id,
-        f"message": "Updated intervention record's status to '{status}'" }]})
+        "message": f"Updated intervention record's status to {status}" }]})
     return jsonify({"status": 404, "Error": f"An intervention with id {intervention_id} doesn't exist"}),404
 
 @app.route("/api/v1/redflags/<int:redflag_id>/status", methods=['PATCH'])

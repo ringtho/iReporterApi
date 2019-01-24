@@ -61,9 +61,9 @@ class TestUserRoutes(unittest.TestCase):
 
     def tearDown(self):
         self.db.empty_tables()
-        self.db.create_users_table()
-        self.db.create_redflags_table()
-        self.db.create_interventions_table()
+        # self.db.create_users_table()
+        # self.db.create_redflags_table()
+        # self.db.create_interventions_table()
        
     def test_create_user(self):
         response = self.test_client.post("/api/v1/auth/signup",json=self.user)

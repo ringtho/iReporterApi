@@ -37,7 +37,7 @@ class Database:
         registered TIMESTAMP DEFAULT NOW(),
         password varchar NOT NULL, 
         email varchar(50) NOT NULL, 
-        isAdmin BOOLEAN NOT NULL """
+        isAdmin BOOLEAN NOT NULL; """
         self.cursor.execute(query)
 
     def create_redflags_table(self):
@@ -52,7 +52,7 @@ class Database:
         status varchar(20) NOT NULL, 
         images varchar(255), 
         videos varchar(255),
-        comment varchar(100) NOT NULL"""
+        comment varchar(100) NOT NULL;"""
         self.cursor.execute(query)
 
     def create_interventions_table(self):
@@ -67,7 +67,7 @@ class Database:
         status varchar(20) NOT NULL, 
         images varchar(255), 
         videos varchar(255),
-        comment varchar(100) NOT NULL
+        comment varchar(100) NOT NULL;
         """
         self.cursor.execute(query)
         

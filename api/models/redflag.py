@@ -35,14 +35,16 @@ class RedFlag:
         cursor = Database().cursor
         query = f"UPDATE redflags SET location='{location}' WHERE id={redflag_id} AND created_by={user_id}"
         cursor.execute(query)
-        return True
+        rows = cursor.rowcount
+        return rows
        
 
     def edit_comment(self, redflag_id,comment,user_id):
         cursor = Database().cursor
         query = f"UPDATE redflags SET comment='{comment}' WHERE id={redflag_id} AND created_by={user_id}"
         cursor.execute(query)
-        return True
+        rows = cursor.rowcount
+        return rows
     
     def delete_redflag_record(self,redflag_id,user_id):
         cursor = Database().cursor

@@ -34,7 +34,8 @@ class Intervention:
         cursor = Database().cursor
         query = f"UPDATE interventions SET location='{location}' WHERE id={intervention_id} AND created_by={user_id}"
         cursor.execute(query)
-        return True
+        rows = cursor.rowcount
+        return rows
 
     def edit_comment(self, intervention_id,comment,user_id):
         cursor = Database().cursor
