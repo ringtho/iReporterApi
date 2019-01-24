@@ -165,7 +165,24 @@ def delete_user(user_id):
             "status": 200,
             "data":[{"id": user['id'],"message":"{} has been deleted from the system".format(user["username"])}]
             })
-    return jsonify({"status": 404, "Error": f"The user with id {user_id} doesnt exist"}),404  
+    return jsonify({"status": 404, "Error": f"The user with id {user_id} doesnt exist"}),404 
+
+@app.route("/api/v1/auth/admin", methods=["POST"])
+def create_admin():
+    data = request.get_json()
+    validator = Validator(request)
+    if validator.validate_user_data():
+        user_obj = User()
+        password = generate_password_hash(data['password'])
+        user_obj.create_user(data['firstname'], data['lastname'], data['othernames'], 
+        data['username'], data['phoneNumber'], password, data['email'],True)
+        del data["password"]
+        return jsonify({"status": 201, "data":[{"user": {
+            "token": "token",
+            "user": data
+        },
+        "message":"Admin successfully created"}]}),201
+    return jsonify({"status": 400, "Error": validator.error}),400
 
 @app.route("/api/v1/interventions" ,methods=["POST"])
 @required_token
@@ -193,7 +210,7 @@ def get_interventions():
     interventions = intervention_obj.get_intervention_records(user_id)
     if interventions:
         return jsonify({"status": 200, "data": interventions }), 200
-    return jsonify({"status": 404, "message":"There are no red flags in the database"}), 404
+    return jsonify({"status": 404, "message":"There are no interventions in the database"}), 404
 
 @app.route("/api/v1/interventions/<int:intervention_id>", methods=["GET"])
 @required_token
@@ -288,7 +305,7 @@ def page_doesnt_exist(e):
         }), 404
         
 @app.errorhandler(405)
-def method_not_allowed(self):
+def method_not_allowed(e):
     methods = [{"PATCH": "editing a redflag", "GET":"retrieving redflags", 
     "POST":"creating a redflag","DELETE":"deleting a redflag"}]
 

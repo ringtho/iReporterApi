@@ -44,21 +44,5 @@ class User:
         if check_password_hash(user["password"], password):
             return user
 
-    # def create_admin(self):
-    #     """method for adding a user item in the users table"""
-    #     self.create_user(
-    #         "Smith",
-    #         "Ringtho",
-    #         "J",
-    #         "admin",
-    #         "+256778339655",
-    #         "admin@gmail.com",
-    #         "pbkdf2:sha256:50000$4RVd9ECa$57dc0f5212e7e5f9c5610a9af385c73fc54b35c27ed1f0bdad6f29ec5791282b",
-    #         True,
 
-    #     )
-
-
-
-
-         
+        

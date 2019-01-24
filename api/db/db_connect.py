@@ -1,7 +1,7 @@
 import psycopg2
 import os
 from os import environ
-from psycopg2.extras import RealDictCursor, Json
+from psycopg2.extras import RealDictCursor
 
 
 class Database:
@@ -16,14 +16,16 @@ class Database:
             self.conn = psycopg2.connect(dbname=dbname,user="postgres",host='localhost',password='.Adgjmp1')
             self.cursor = self.conn.cursor(cursor_factory=RealDictCursor)
             self.conn.autocommit = True
-            self.create_tables()
+            self.create_users_table()
+            self.create_redflags_table()
+            self.create_interventions_table()
           
             print("connected to database")
         except (Exception, psycopg2.OperationalError) as e:
             print(e)
 
-    def create_tables(self):
-        tables=("""
+    def create_users_table(self):
+        query = """
         DROP TABLE IF EXISTS users;
         CREATE TABLE IF NOT EXISTS users
         (id serial PRIMARY KEY, 
@@ -35,10 +37,11 @@ class Database:
         registered TIMESTAMP DEFAULT NOW(),
         password varchar NOT NULL, 
         email varchar(50) NOT NULL, 
-        isAdmin BOOLEAN NOT NULL 
+        isAdmin BOOLEAN NOT NULL """
+        self.cursor.execute(query)
 
-        """,
-        """
+    def create_redflags_table(self):
+        query = """ 
         DROP TABLE IF EXISTS redflags;
         CREATE TABLE IF NOT EXISTS redflags(
         id serial PRIMARY KEY, 
@@ -49,10 +52,11 @@ class Database:
         status varchar(20) NOT NULL, 
         images varchar(255), 
         videos varchar(255),
-        comment varchar(100) NOT NULL
-        """,
+        comment varchar(100) NOT NULL"""
+        self.cursor.execute(query)
 
-        """
+    def create_interventions_table(self):
+        query =  """
         DROP TABLE IF EXISTS interventions;
         CREATE TABLE IF NOT EXISTS interventions(
         id serial PRIMARY KEY, 
@@ -63,10 +67,10 @@ class Database:
         status varchar(20) NOT NULL, 
         images varchar(255), 
         videos varchar(255),
-        comment varchar(100) NOT NULL   
-        """)
-        for table in tables:
-            self.cursor.execute(table)
+        comment varchar(100) NOT NULL
+        """
+        self.cursor.execute(query)
+        
 
     def empty_tables(self):
         self.cursor.execute("TRUNCATE TABLE users CASCADE")

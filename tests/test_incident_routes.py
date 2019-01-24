@@ -30,6 +30,9 @@ class TestRedFlags(unittest.TestCase):
 
     def tearDown(self):
         self.db.empty_tables()
+        self.db.create_users_table()
+        self.db.create_redflags_table()
+        self.db.create_interventions_table()
 
 
     def test_hello_world(self):
