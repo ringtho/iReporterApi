@@ -23,9 +23,15 @@ class Intervention:
         print(interventions)
         return interventions
 
-    def get_single_intervention(self,redflag_id, user_id):
+    def get_single_intervention(self,intervention_id, user_id):
         cursor = Database().cursor
-        query = f"SELECT * FROM interventions WHERE id={redflag_id} AND created_by={user_id}"
+        query = f"SELECT * FROM interventions WHERE id={intervention_id} AND created_by={user_id}"
         cursor.execute(query)
         intervention = cursor.fetchone()
         return intervention
+
+    def edit_location(self, intervention_id,location,user_id):
+        cursor = Database().cursor
+        query = f"UPDATE interventions SET location='{location}' WHERE id={intervention_id} AND created_by={user_id}"
+        cursor.execute(query)
+        return True
