@@ -17,9 +17,24 @@ class GetTokenTests:
         }
     
         response = app.test_client().post('/api/v1/auth/signup', json=register_info)
+
+        admin={
+            
+            "firstname": "smith",
+            "lastname": "ringtho",
+            "othernames": "J",
+            "email": "admin@gmail.com",
+            "phoneNumber": "+256778339655",
+            "username": "admin",
+            "password": "Sr654321"
+
+        }
+
+        response = app.test_client().post('/api/v1/auth/admin', json=admin)
+
         user = {
 
-                "username": "sringtho1",
+                "username": "admin",
                 "password": "Sr654321"
 
             }
@@ -28,8 +43,25 @@ class GetTokenTests:
         token = json.loads(response.data)["data"][0]['token']
         # print(token)
         return token
+        
+     
+        
+        
 
     def get_admin_token(self):
+        admin={
+            
+            "firstname": "smith",
+            "lastname": "ringtho",
+            "othernames": "J",
+            "email": "admin@gmail.com",
+            "phoneNumber": "+256778339655",
+            "username": "admin",
+            "password": "Sr654321"
+
+        }
+
+        response = app.test_client().post('/api/v1/auth/admin', json=admin)
         
         admin = {
 
