@@ -41,3 +41,10 @@ class Intervention:
         query = f"UPDATE interventions SET comment='{comment}' WHERE id={intervention_id} AND created_by={user_id}"
         cursor.execute(query)
         return True
+
+    def delete_intervention_record(self,intervention_id,user_id):
+        cursor = Database().cursor
+        query = f"DELETE FROM interventions WHERE id={intervention_id} AND created_by={user_id}"
+        cursor.execute(query)
+        rows = cursor.rowcount
+        return rows
