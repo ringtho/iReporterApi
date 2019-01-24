@@ -1,7 +1,7 @@
 from flask import Flask, jsonify, request, json
 from api.models.redflag import RedFlag
 from api.models.interventions import Intervention
-from api.models.user import (User, users)
+from api.models.user import User
 from api.validator import Validator
 from api.resources.auth import encode_token
 from api.resources.auth import decode_token
@@ -23,7 +23,7 @@ redflags = []
 redflag_obj = RedFlag()
 intervention_obj = Intervention()
 validator = Validator(request)
-cursor = Database().cursor
+cursor = Database().get_cursor()
 
 @app.route("/")
 def hello():
@@ -163,9 +163,6 @@ def get_user_info():
 @app.route("/api/v1/auth/users/<int:user_id>", methods=["DELETE"])
 @admin_required
 def delete_user(user_id):
-    # for user in users:
-    #     if user['id'] == user_id:
-    #         users.remove(user)
     user_obj = User()
     delete = user_obj.delete_particular_user(user_id)
     if delete > 0:
@@ -268,7 +265,7 @@ def edit_intervention_status(intervention_id):
         "message": f"Updated intervention record's status to {status}" }]})
     return jsonify({"status": 404, "Error": f"An intervention with id {intervention_id} doesn't exist"}),404
 
-@app.route("/api/v1/redflags/<int:redflag_id>/status", methods=['PATCH'])
+@app.route("/api/v1/red-flags/<int:redflag_id>/status", methods=['PATCH'])
 @admin_required
 def edit_redflag_status(redflag_id):
     # user_id = get_id_token()
@@ -277,7 +274,7 @@ def edit_redflag_status(redflag_id):
     record = redflag_obj.edit_status_admin(redflag_id,status)
     if record:
         return jsonify({"status":200, "data": [{"id": redflag_id,
-        f"message": "Updated intervention record's status to '{status}'" }]})
+        "message": f"Updated redflag record's status to {status}" }]})
     return jsonify({"status": 404, "Error": f"An intervention with id {redflag_id} doesn't exist"}),404
 
 

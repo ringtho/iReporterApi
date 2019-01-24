@@ -1,7 +1,7 @@
 import re
 from api.db.db_connect import Database
 
-cursor = Database().cursor
+cursor = Database().get_cursor()
 
 class Validator:
     def __init__(self, request):

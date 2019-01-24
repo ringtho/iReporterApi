@@ -9,4 +9,5 @@ api/__init__.pyc
 api/__init__.py 
 api/db/__init__.py  
 api/resources/__init__.py
+api/views/__init__.py  
 *__init__.py

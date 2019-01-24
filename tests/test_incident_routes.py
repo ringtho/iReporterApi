@@ -139,6 +139,22 @@ class TestRedFlags(unittest.TestCase):
         self.assertEqual(data["data"][0]["message"], "red-flag record has been deleted")
         self.assertEqual(data["status"], 200)
 
+    def test_update_status(self):
+        getter = GetTokenTests()
+        token = getter.get_user_post()
+        headers={"Authorization":"Bearer " + token}
+        response = self.test_client.post("/api/v1/red-flags",
+        headers=headers, json=self.incident)
+        self.assertEqual(response.status_code, 201)
+        token2 = getter.get_admin_token()
+        headers={"Authorization":"Bearer " + token2}
+        status = {"status":"Resolved"}
+        res = self.test_client.patch("/api/v1/red-flags/{}/status".format(response.json["data"][0]["id"]), headers=headers, json=status)
+        data = json.loads(res.data)
+        print(data)
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(data["data"][0]["message"], "Updated redflag record's status to Resolved")
+
        
     def test_delete_nonexistent_object(self):
         response = self.test_client.delete("/api/v1/red-flags/2",
@@ -149,17 +165,17 @@ class TestRedFlags(unittest.TestCase):
         self.assertEqual(data["status"], 404)
         self.assertIn("The red flag record with id 2 doesnt exist", data["Error"])
 
-    # def test_error_patch_invalid_id(self):
-    #     response = self.test_client.post("/api/v1/red-flags",
-    #      headers=dict(Authorization='Bearer '+ GetTokenTests.get_user_post(self)), json=self.incident)
-    #     self.assertEqual(response.status_code, 201)
-    #     location = {"location":"5.056,56.234"}
-    #     response = self.test_client.patch("/api/v1/red-flags/7000/location" ,
-    #     headers=dict(Authorization='Bearer '+ GetTokenTests.get_user_post(self)),json=location)
-    #     data = json.loads(response.data)
-    #     print(data)
-    #     self.assertEqual(data["status"], 404)
-    #     self.assertIn("Non existent redflag", data["Error"])
+    def test_error_patch_invalid_id(self):
+        response = self.test_client.post("/api/v1/red-flags",
+         headers=dict(Authorization='Bearer '+ GetTokenTests.get_user_post(self)), json=self.incident)
+        self.assertEqual(response.status_code, 201)
+        location = {"location":"5.056,56.234"}
+        response = self.test_client.patch("/api/v1/red-flags/7000/location" ,
+        headers=dict(Authorization='Bearer '+ GetTokenTests.get_user_post(self)),json=location)
+        data = json.loads(response.data)
+        print(data)
+        self.assertEqual(data["status"], 404)
+        self.assertIn("The redflag with id 7000 doesnt exist", data["Error"])
 
     def test_error_patch_invalid_query_name(self):
         response = self.test_client.post("/api/v1/red-flags",
