@@ -49,3 +49,10 @@ class Intervention:
         cursor.execute(query)
         rows = cursor.rowcount
         return rows
+
+    def edit_status_admin(self, intervention_id,status):
+        cursor = Database().cursor
+        query = f"UPDATE interventions SET status='{status}' WHERE id={intervention_id}"
+        cursor.execute(query)
+        rows = cursor.rowcount
+        return rows
