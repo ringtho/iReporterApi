@@ -10,11 +10,11 @@ class RedFlag:
     """
     
     def create_redflag(self,incident_type,location, created_by, images, videos,comment, status):
-        cursor = Database().cursor
+        cur = Database().cur
         create_redflag= """
         INSERT INTO redflags (incident_type, location, created_by, images, videos, comment, status) 
         VALUES('{}','{}','{}','{}','{}','{}','{}')""".format(incident_type,location, created_by, images, videos,comment, status)
-        return cursor.execute(create_redflag)
+        return cur.execute(create_redflag)
     
     def get_redflag_records(self,user_id):
         cursor = Database().cursor
@@ -47,10 +47,10 @@ class RedFlag:
         return rows
     
     def delete_redflag_record(self,redflag_id,user_id):
-        cursor = Database().cursor
+        cur = Database().cursor
         query = f"DELETE FROM redflags WHERE id={redflag_id} AND created_by={user_id}"
-        cursor.execute(query)
-        rows = cursor.rowcount
+        cur.execute(query)
+        rows = cur.rowcount
         return rows
 
     def edit_status_admin(self, redflag_id,status):

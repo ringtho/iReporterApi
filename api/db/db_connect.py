@@ -15,6 +15,7 @@ class Database:
             # self.conn = psycopg2.connect(environ.get("DATABASE_URL"))
             self.conn = psycopg2.connect(dbname=dbname,user="postgres",host='localhost',password='.Adgjmp1')
             self.cursor = self.conn.cursor(cursor_factory=RealDictCursor)
+            self.cur = self.conn.cursor()
             self.conn.autocommit = True
             self.create_users_table()
             self.create_redflags_table()

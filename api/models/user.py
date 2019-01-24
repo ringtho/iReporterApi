@@ -9,31 +9,16 @@ cursor = Database().cursor
 
 count = 1
 
- 
-admin = {
-    "id":0,
-	"firstname": "smith",
-	"lastname": "Ringtho",
-	"othernames": "J",
-	"email": "admin@yahoo.com",
-	"phoneNumber": "+256778339655",
-	"username": "admin",
-	"password": "pbkdf2:sha256:50000$4RVd9ECa$57dc0f5212e7e5f9c5610a9af385c73fc54b35c27ed1f0bdad6f29ec5791282b",
-    "isAdmin": 1,
-    "registered": "Sun, 20 Jan 2019 21:08:15 GMT",
-
-}   
-users = [admin]
-
 class User:
 
     def create_user(self,firstname, lastname, othernames, username, phoneNumber, password, email, isAdmin):
-        global cursor
+        # cursor = Database().cursor
+        cur = Database().cur
         create_user= """
         INSERT INTO users (firstname, lastname, othernames, username, phoneNumber, password, email,isAdmin) 
         VALUES('{}','{}','{}','{}','{}','{}','{}','{}')""".format(firstname, 
         lastname, othernames, username, phoneNumber, password, email,isAdmin)
-        return cursor.execute(create_user)
+        return cur.execute(create_user)
     
 
     def get_user(self, username, password):
@@ -51,9 +36,10 @@ class User:
         return users
 
     def delete_particular_user(self, user_id):
+        cur = Database().cur
         query = f"DELETE FROM users WHERE id={user_id}"
-        cursor.execute(query)
-        rows = cursor.rowcount
+        cur.execute(query)
+        rows = cur.rowcount
         return rows
 
 

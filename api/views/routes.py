@@ -1,7 +1,7 @@
 from flask import Flask, jsonify, request, json
 from api.models.redflag import RedFlag
 from api.models.interventions import Intervention
-from api.models.user import (User, users)
+from api.models.user import User
 from api.validator import Validator
 from api.resources.auth import encode_token
 from api.resources.auth import decode_token
