@@ -7,6 +7,9 @@ from psycopg2.extras import RealDictCursor
 class Database:
 
     def __init__(self):
+        self.conn = psycopg2.connect(dbname="",user="postgres",host='localhost',password='.Adgjmp1')
+        self.cursor = self.conn.cursor(cursor_factory=RealDictCursor)
+        self.conn.autocommit = True
         try:
             if os.getenv("STATE")=="Testing":
                 dbname = "ireportertest"
