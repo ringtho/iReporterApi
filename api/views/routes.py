@@ -231,6 +231,19 @@ def edit_intervention_comment(intervention_id):
         "message": "Updated intervention record's comment" }]})
     return jsonify({"status": 404, "Error": f"The intervention with id {intervention_id} doesn't exist"}),404
 
+@app.route("/api/v1/interventions/<int:intervention_id>/status", methods=['PATCH'])
+@admin_required
+def edit_intervention_status(intervention_id):
+    # user_id = get_id_token()
+    data = request.get_json()
+    status = data["status"]
+    record = intervention_obj.edit_status_admin(intervention_id,status)
+    if record:
+        return jsonify({"status":200, "data": [{"id": intervention_id,
+        f"message": "Updated intervention record's status to '{status}'" }]})
+    return jsonify({"status": 404, "Error": f"An intervention with id {intervention_id} doesn't exist"}),404
+
+
 @app.route("/api/v1/interventions/<int:intervention_id>" ,methods=['DELETE'])
 @required_token
 def delete_intervention(intervention_id):
