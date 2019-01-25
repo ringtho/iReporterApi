@@ -61,9 +61,7 @@ class TestUserRoutes(unittest.TestCase):
 
     def tearDown(self):
         self.db.empty_tables()
-        # self.db.create_users_table()
-        # self.db.create_redflags_table()
-        # self.db.create_interventions_table()
+
        
     def test_create_user(self):
         response = self.test_client.post("/api/v1/auth/signup",json=self.user)
@@ -174,15 +172,29 @@ class TestUserRoutes(unittest.TestCase):
     # def test_delete_user(self):
     #     response = self.test_client.post("/api/v1/auth/signup",  json=self.user)
     #     self.assertEqual(response.status_code, 201)
-    #     print(response.data)
+    #     print(response.json)
     #     getter = GetTokenTests()
     #     token = getter.get_admin_token()
     #     headers={"Authorization":"Bearer " + token}
-    #     res = self.test_client.get("/api/v1/auth/users{}".format(response.json["data"][0]["id"]), headers=headers)
+    #     res = self.test_client.delete("/api/v1/auth/users/{}".format(response.json["data"][0]["id"]), headers=headers)
     #     data = json.loads(res.data)
     #     print(data)
     #     self.assertEqual(res.status, 200)
     #     self.assertEqual(data["status"], 200)
+
+    def test_delete_nonexistent_user(self):
+        response = self.test_client.post("/api/v1/auth/signup",  json=self.user)
+        self.assertEqual(response.status_code, 201)
+        print(response.json)
+        getter = GetTokenTests()
+        token = getter.get_admin_token()
+        headers={"Authorization":"Bearer " + token}
+        res = self.test_client.delete("/api/v1/auth/users/4", headers=headers)
+        data = json.loads(res.data)
+        print(data)
+        # self.assertIn(404, res.status_code)
+        self.assertEqual(data["status"], 404)
+        self.assertEqual(data["Error"], "The user with id 4 doesnt exist")
         
 
 
