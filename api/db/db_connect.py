@@ -10,16 +10,24 @@ class Database:
         try:
             if os.getenv("STATE")=="Testing":
                 dbname = "ireportertest"
+                self.conn = psycopg2.connect(dbname=dbname,user="postgres",host='localhost',password='.Adgjmp1')
+                self.cursor = self.conn.cursor(cursor_factory=RealDictCursor)
+                self.cur = self.conn.cursor()
+                self.conn.autocommit = True
+                self.create_users_table()
+                self.create_redflags_table()
+                self.create_interventions_table()
+
             else:
                 dbname = "ireporter"
             # self.conn = psycopg2.connect(environ.get("DATABASE_URL"))
-            self.conn = psycopg2.connect(dbname=dbname,user="postgres",host='localhost',password='.Adgjmp1')
-            self.cursor = self.conn.cursor(cursor_factory=RealDictCursor)
-            self.cur = self.conn.cursor()
-            self.conn.autocommit = True
-            self.create_users_table()
-            self.create_redflags_table()
-            self.create_interventions_table()
+                self.conn = psycopg2.connect(environ.get('URI'))
+                self.cursor = self.conn.cursor(cursor_factory=RealDictCursor)
+                self.cur = self.conn.cursor()
+                self.conn.autocommit = True
+                self.create_users_table()
+                self.create_redflags_table()
+                self.create_interventions_table()
           
             print("connected to database")
         except (Exception, psycopg2.OperationalError) as e:
