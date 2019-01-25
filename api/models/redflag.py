@@ -60,8 +60,12 @@ class RedFlag:
         rows = cursor.rowcount
         return rows
 
-
-
+    def get_id_signup(self):
+        cursor = Database().get_cursor()
+        query = "SELECT id FROM redflags ORDER BY id DESC"
+        cursor.execute(query)
+        redflag_id = cursor.fetchone()["id"]
+        return redflag_id
 
         
 

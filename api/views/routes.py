@@ -38,9 +38,7 @@ def create_redflag():
         data = request.get_json()
         redflag_obj.create_redflag(data["incident_type"], data["location"],user_id,data["images"], 
         data["videos"],data["comment"], "DRAFT")
-        query = "SELECT id FROM redflags ORDER BY id DESC"
-        cursor.execute(query)
-        redflag_id = cursor.fetchone()["id"]
+        redflag_id = redflag_obj.get_id_signup()
         return jsonify({"status": 201, "data": [{ "id":redflag_id,
         "message": "red flag record created."}]}), 201
     else:
@@ -116,8 +114,9 @@ def create_user():
         user_obj.create_user(data['firstname'], data['lastname'], data['othernames'], 
         data['username'], data['phoneNumber'], password, data['email'],False)
         del data["password"]
+        user_id = user_obj.get_id_signup()
         return jsonify({"status": 201, "data":[{"user": {
-            "token": "token",
+            "id": user_id,
             "user": data
         },
         "message":"User successfully created"}]}),201
@@ -159,6 +158,16 @@ def get_user_info():
     if users:
         return jsonify({"status": 200,"data": users}), 200
     return jsonify({"status": 404, "Error": "There are no users in the database"}),404
+
+@app.route("/api/v1/auth/users/<int:user_id>", methods=["GET"])
+@admin_required
+def get_particular_user(user_id):
+    user = User()
+    record = user.get_particular_user(user_id)
+    if record:
+        return jsonify({"status": 200, "data": record}), 200
+    return jsonify({"status":404, "Error": f"User with id {user_id} doesnt exist"}), 404
+
 
 @app.route("/api/v1/auth/users/<int:user_id>", methods=["DELETE"])
 @admin_required

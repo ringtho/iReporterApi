@@ -169,18 +169,32 @@ class TestUserRoutes(unittest.TestCase):
         self.assertEqual(data["status"], 200)
         self.assertEqual(data["data"][1]["firstname"], "Mark")
 
-    # def test_delete_user(self):
-    #     response = self.test_client.post("/api/v1/auth/signup",  json=self.user)
-    #     self.assertEqual(response.status_code, 201)
-    #     print(response.json)
-    #     getter = GetTokenTests()
-    #     token = getter.get_admin_token()
-    #     headers={"Authorization":"Bearer " + token}
-    #     res = self.test_client.delete("/api/v1/auth/users/{}".format(response.json["data"][0]["id"]), headers=headers)
-    #     data = json.loads(res.data)
-    #     print(data)
-    #     self.assertEqual(res.status, 200)
-    #     self.assertEqual(data["status"], 200)
+    def test_get_particular_user(self):
+        response = self.test_client.post("/api/v1/auth/signup", json=self.user2)
+        print(response.json)
+        self.assertEqual(response.status_code, 201)
+        getter = GetTokenTests()
+        token = getter.get_admin_token()
+        headers={"Authorization":"Bearer " + token}
+        res = self.test_client.get("/api/v1/auth/users/{}".format(response.json["data"][0]["user"]["id"]), headers=headers)
+        data = json.loads(res.data)
+        print(data)
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(data["status"], 200)
+        self.assertEqual(data["data"]["firstname"], "Mark")
+
+    def test_delete_user(self):
+        response = self.test_client.post("/api/v1/auth/signup",  json=self.user)
+        self.assertEqual(response.status_code, 201)
+        print(response.json)
+        getter = GetTokenTests()
+        token = getter.get_admin_token()
+        headers={"Authorization":"Bearer " + token}
+        res = self.test_client.delete("/api/v1/auth/users/{}".format(response.json["data"][0]["user"]["id"]), headers=headers)
+        data = json.loads(res.data)
+        print(data)
+        self.assertIn(res.status, '200 OK')
+        self.assertEqual(data["status"], 200)
 
     def test_delete_nonexistent_user(self):
         response = self.test_client.post("/api/v1/auth/signup",  json=self.user)
