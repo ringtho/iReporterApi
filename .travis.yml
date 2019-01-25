@@ -10,7 +10,7 @@ env:
   global:
     - STATE = "Testing"
 
-before script:
+before_script:
   - "psql -c 'CREATE DATABASE ireportertest;' -U postgres"
   # - export DATABASE ireportertest
 
