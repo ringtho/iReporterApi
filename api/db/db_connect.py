@@ -9,7 +9,7 @@ class Database:
     def __init__(self):
         try:
             if os.getenv("STATE")=="Testing":
-                dbname = "ireportertest"
+                dbname = "ireporter"
             else:
                 dbname = "ireporter"
             # self.conn = psycopg2.connect(environ.get("DATABASE_URL"))
